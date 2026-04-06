@@ -1,0 +1,39 @@
+$kind: http-request
+name: http://127.0.0.1:8000/api/admin/users?name=
+url: http://127.0.0.1:8000/api/admin/users?name=
+method: POST
+queryParams:
+  name: ""
+body:
+  type: formdata
+  content:
+    - type: text
+      key: name
+      value: a
+      description: ""
+      disabled: false
+    - type: text
+      key: email
+      value: ab@gmail.com
+      description: ""
+      disabled: false
+    - type: text
+      key: password
+      value: "12345678"
+      description: ""
+      disabled: false
+    - type: text
+      key: role
+      value: user
+      description: ""
+      disabled: false
+    - type: text
+      key: ""
+      value: ""
+      description: ""
+      disabled: true
+auth:
+  type: bearer
+  credentials:
+    token: 9|CdCu8dvtv9PfcMlJRz0AaUgPdP93du0N9pATPgni4072a969
+order: 4400273603425620

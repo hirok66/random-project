@@ -174,7 +174,7 @@
                     </li>
                     @if(Auth::user()->role== 'admin')
                     <li class="side-nav-item">
-                        <a href="{{ route('add.user') }}" target="_blank" class="side-nav-link">
+                        <a href="{{ url('/admin/add-user') }}" target="_blank" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="users"></i></span>
                             <span class="menu-text" data-lang="landing-page">Add User</span>
                         </a>
@@ -182,17 +182,18 @@
                     @endif
 
                     <li class="side-nav-title" data-lang="apps-title">MODULE</li>
-                     @if(Auth::user()->role== 'admin'||Auth::user()->role== 'moderator')
+                    @if(Auth::user()->role== 'admin')
                     <li class="side-nav-item">
-                        <a href="{{ route('category.index') }}" class="side-nav-link">
+                        <a href="{{ url('/admin/categories') }}" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="chart-bar-stacked"></i> </span>
                             <span class="menu-text" data-lang="chat"> Category </span>
                         </a>
                     </li>
-                           @endif
-                     @if(Auth::user()->role== 'admin'||Auth::user()->role== 'moderator')
+                      @endif
+
+                     @if(Auth::user()->role== 'admin')
                     <li class="side-nav-item">
-                        <a href="{{ route('tag.index') }}" class="side-nav-link">
+                        <a href="{{ url('/admin/tages') }}" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="tage"></i></span>
                             <span class="menu-text" data-lang="calendar">Tage </span>
                         </a>

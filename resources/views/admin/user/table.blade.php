@@ -36,7 +36,7 @@
     </tr>
 @empty
    <tr>
-        <td colspan="7" class="text-center text-danger font-bold"><b>No users found.</b></td>
+        <td colspan="10" class="text-center text-danger font-bold"><b>No users found.</b></td>
     </tr>
 
 @endforelse ($users as $key => $user)

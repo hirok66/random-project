@@ -3,6 +3,13 @@
     <tr>
         <td>{{ $key + 1 }}</td>
         <td>{{ $category->name }}</td>
+        <td>
+            @if ($category->image)
+                <img src="{{ asset('uploads/' . $category->image) }}" alt="{{ $category->name }}" width="50">
+            @else
+                <span>No Image</span>
+            @endif
+        </td>
 
 
         <td>

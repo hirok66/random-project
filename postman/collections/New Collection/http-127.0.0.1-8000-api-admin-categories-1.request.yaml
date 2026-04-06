@@ -1,0 +1,12 @@
+$kind: http-request
+name: http://127.0.0.1:8000/api/admin/categories
+url: http://127.0.0.1:8000/api/admin/categories
+method: GET
+body:
+  type: formdata
+  content: []
+auth:
+  type: bearer
+  credentials:
+    token: 11|QsSvQM6p4G0A8h2MqwhyblkceWDHY7zWpgD0fXi50bbfdc9c
+order: 4470404344375856

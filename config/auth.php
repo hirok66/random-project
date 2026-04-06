@@ -42,6 +42,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'gest' => [
+            'driver' => 'session',
+            'provider' => 'gests',
+        ],
+
+
+
     ],
 
     /*
@@ -65,6 +73,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
+        ],
+        'gests' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', \App\Models\Gest::class),
         ],
 
         // 'users' => [

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\File;
+
 
 class CategoryController extends Controller
 {
@@ -31,30 +34,45 @@ class CategoryController extends Controller
         ]);
     }
     // store category
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
+   public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ]);
 
-        ]);
+
+
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $filename = time() . '.webp';
+   $file->move(public_path('uploads'), $filename);
+    }
+
 
         Category::create([
-            'name' => $request->name,
-
-
+            'name'   => $request->name,
+            'image'  => $filename,
+            'status' => 'active',
         ]);
-        return response()->json(['message' => 'category created successfully']);
-    }
+        return response()->json(['message' => 'Category created successfully']);
+
+
+}
+
 
 
     // updateStatus
     public function updateStatus(Request $request)
     {
+
+
         $category = Category::findOrFail($request->id);
         $category->status = $request->status;
         $category->save();
 
         return response()->json(['success' => true]);
+
     }
 
 // fetch
@@ -76,23 +94,40 @@ public function fetch(Request $request) {
 
 // update
 
+
 public function update(Request $request)
-    {
-        $request->validate([
-            'id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
+{
+    $request->validate([
+        'id' => 'required|exists:categories,id',
+        'name' => 'required|string|max:255',
+        'status' => 'required',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048' // ভ্যালিডেশন যোগ করা ভালো
+    ]);
 
-            'status' => 'required'
-        ]);
+    $category = Category::find($request->id);
+    $filename = $category->image; // ডিফল্ট হিসেবে আগের নাম রাখা হলো
 
-        $category = Category::find($request->id);
-        $category->update([
-            'name' => $request->name,
-            'status' => $request->status,
-        ]);
+    if ($request->hasFile('image')) {
+        // ১. পুরানো ইমেজটি ফোল্ডার থেকে ডিলিট করা (যদি থাকে)
+        if ($category->image && File::exists(public_path('uploads/' . $category->image))) {
+            File::delete(public_path('uploads/' . $category->image));
+        }
 
-        return response()->json(['success' => 'category updated successfully!']);
+if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $filename = time() . '.webp';
+   $file->move(public_path('uploads'), $filename);
     }
+    // ৩. ডাটাবেজ আপডেট
+    $category->update([
+        'name' => $request->name,
+        'status' => $request->status,
+        'image' => $filename, // নতুন বা পুরনো ফাইলের নাম সেভ হবে
+    ]);
+
+    return response()->json(['success' => 'Category updated successfully!']);
+}
+}
 
 // status update
 public function status(Request $request)
@@ -105,13 +140,23 @@ public function status(Request $request)
 
 // delete
 
-public function delete($id)
-    {
-        $category = Category::findOrFail($id);
-        $category->delete();
 
-        return response()->json(['success' => 'Category deleted successfully!']);
+
+public function delete($id)
+{
+    // ১. প্রথমে আইডি দিয়ে ক্যাটাগরি খুঁজে বের করুন
+    $category = Category::findOrFail($id);
+
+    // ২. ফোল্ডার থেকে ইমেজটি ডিলিট করুন (যদি থাকে)
+    if ($category->image && File::exists(public_path('uploads/' . $category->image))) {
+        File::delete(public_path('uploads/' . $category->image));
     }
+
+    // ৩. ডাটাবেজ থেকে রেকর্ডটি ডিলিট করুন
+    $category->delete();
+
+    return response()->json(['success' => 'Category and image deleted successfully!']);
+}
 
 
 

@@ -26,6 +26,7 @@
 
                             <th>Sl</th>
                             <th>Name</th>
+                            <th>Image</th>
                             <th>Status</th>
                              <th>Action</th>
                         </tr>
@@ -45,7 +46,8 @@
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="formData">
+                    <form id="formData" enctype="multipart/form-data">
+
                         @csrf
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Add category</h5>
@@ -56,6 +58,13 @@
                                 <label for="name" class="form-label">Name</label>
                                 <input type="text" class="form-control" id="name" name="name">
                                 @error('name')
+                                    <div class="text-danger error">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Image</label>
+                                <input type="file" class="form-control" id="image" name="image">
+                                @error('image')
                                     <div class="text-danger error">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -78,7 +87,7 @@
 
 
 
-            <form id="editData"> <!-- এডিট করার জন্য আলাদা আইডি -->
+            <form id="editData" enctype="multipart/form-data"> <!-- এডিট করার জন্য আলাদা আইডি -->
                 @csrf
                 <!-- ইউজারের আইডি ধরার জন্য নিচের হিডেন ইনপুটটি অবশ্যই লাগবে -->
                 <input type="hidden" id="editcategoryId" name="id">
@@ -92,6 +101,11 @@
                         <label for="editname" class="form-label">Name</label>
                         <input type="text" class="form-control" id="editname" name="name">
                         <div class="text-danger error-edit-name"></div> <!-- AJAX এররের জন্য -->
+                    </div>
+                    <div class="mb-3">
+                        <label for="editimage" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="editimage" name="image">
+                        <div class="text-danger error-edit-image"></div> <!-- AJAX এররের জন্য -->
                     </div>
 
 
@@ -118,7 +132,7 @@
     </div>
 @endsection
 
-@section('footer')
+
     @section('footer')
         <script>
             $(document).ready(function () {
@@ -141,7 +155,7 @@
                     $('.error').text('');
                     let formData = new FormData(this);
                     $.ajax({
-                        url: "{{ route('store.category') }}",
+                        url: "{{ url('/admin/categories/store') }}",
                         method: "POST",
                         data: formData,
                         contentType: false,
@@ -169,11 +183,12 @@
                 $(document).on('click', '.edit-btn', function() {
                     let id = $(this).data('id');
                     let name = $(this).data('name');
-
+                    let image = $(this).data('image');
                     let status = $(this).data('status');
 
                     $('#editcategoryId').val(id);
                     $('#editname').val(name);
+                    $('#editimage').val(image);
                     $('#editstatus').val(status);
                     $('#editModal').modal('show');
                 });
@@ -183,7 +198,7 @@
                     e.preventDefault();
                     let formData = new FormData(this);
                     $.ajax({
-                        url: "{{ route('category.update') }}", // রাউটটি চেক করে নিন
+                        url: "{{ url('/admin/categories') }}", // রাউটটি চেক করে নিন
                         method: "POST",
                         data: formData,
                         contentType: false,
@@ -209,7 +224,7 @@
                     let newStatus = (currentStatus === 'active') ? 'inactive' : 'active';
 
                     $.ajax({
-                        url: "{{ route('category.updateStatus') }}",
+                        url: "{{ url('/admin/categories/edit') }}",
                         method: "POST",
                         data: { id: categoryId, status: newStatus },
                         success: function (response) {
@@ -232,7 +247,7 @@
                     let newStatus = (currentStatus === 'active') ? 'inactive' : 'active';
 
                     $.ajax({
-                        url: "{{ route('category.status') }}",
+                        url: "{{ url('/admin/categories/status') }}",
                         method: "get",
                         data: { id: categoryId, status: newStatus },
                         success: function (response) {
@@ -257,7 +272,7 @@
         // আপনার fetchData ফাংশনটি একটু আপডেট করে নিন
         function fetchData(page = 1, search = '') {
             $.ajax({
-                url: "{{ route('category.fetch') }}",
+                url: "{{ url('/admin/categories/fetch') }}",
                 type: "GET",
                 data: {
                     page: page,
@@ -317,4 +332,4 @@
 
 
 
-@endsection
+

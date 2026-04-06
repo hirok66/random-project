@@ -141,7 +141,7 @@
                     $('.error').text('');
                     let formData = new FormData(this);
                     $.ajax({
-                        url: "{{ route('tage.store') }}",
+                        url: "{{ url('/admin/tages/store') }}", // রাউটটি চেক করে নিন
                         method: "POST",
                         data: formData,
                         contentType: false,
@@ -183,7 +183,7 @@
                     e.preventDefault();
                     let formData = new FormData(this);
                     $.ajax({
-                        url: "{{ route('tage.update') }}", // রাউটটি চেক করে নিন
+                        url: "{{ url('/admin/tages/update') }}", // রাউটটি চেক করে নিন
                         method: "POST",
                         data: formData,
                         contentType: false,
@@ -209,7 +209,7 @@
                     let newStatus = (currentStatus === 'active') ? 'inactive' : 'active';
 
                     $.ajax({
-                        url: "{{ route('tage.updateStatus') }}",
+                        url: "{{ url('/admin/tages/edit') }}",
                         method: "POST",
                         data: { id: tageId, status: newStatus },
                         success: function (response) {
@@ -232,7 +232,7 @@
                     let newStatus = (currentStatus === 'active') ? 'inactive' : 'active';
 
                     $.ajax({
-                        url: "{{ route('tage.status') }}",
+                        url: "{{ url('/admin/tages/status') }}",
                         method: "get",
                         data: { id: tageId, status: newStatus },
                         success: function (response) {
@@ -257,7 +257,7 @@
         // আপনার fetchData ফাংশনটি একটু আপডেট করে নিন
         function fetchData(page = 1, search = '') {
             $.ajax({
-                url: "{{ route('tage.fetch') }}",
+                url: "{{ url('/admin/tages/fetch') }}",
                 type: "GET",
                 data: {
                     page: page,
@@ -287,7 +287,7 @@
                 if (result.isConfirmed) {
                     // AJAX এর মাধ্যমে ডিলিট রিকোয়েস্ট
                     $.ajax({
-                        url: "/admin/tage/delete/" + id,
+                        url: "/admin/tages/delete/" + id,
                         method: "DELETE",
                         success: function(response) {
 

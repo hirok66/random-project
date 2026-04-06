@@ -1,0 +1,17 @@
+$kind: http-request
+name: http://127.0.0.1:8000/api/admin/categories/store
+url: http://127.0.0.1:8000/api/admin/categories/store
+method: POST
+body:
+  type: formdata
+  content:
+    - type: text
+      key: name
+      value: tul
+      description: ""
+      disabled: false
+auth:
+  type: bearer
+  credentials:
+    token: 11|QsSvQM6p4G0A8h2MqwhyblkceWDHY7zWpgD0fXi50bbfdc9c
+order: 4472935822422825

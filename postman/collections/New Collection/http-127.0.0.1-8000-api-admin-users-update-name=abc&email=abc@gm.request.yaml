@@ -1,0 +1,19 @@
+$kind: http-request
+name: http://127.0.0.1:8000/api/admin/users/update?name=abc&email=abc@gmail.com&password=12345678&role=user&status=inactive&id=47
+url: http://127.0.0.1:8000/api/admin/users/update?name=a&email=r3@gmail.com&password=12345678&role=admin&status=inactive&id=48
+method: POST
+queryParams:
+  name: a
+  email: r3@gmail.com
+  password: "12345678"
+  role: admin
+  status: inactive
+  id: "48"
+body:
+  type: json
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: 9|CdCu8dvtv9PfcMlJRz0AaUgPdP93du0N9pATPgni4072a969
+order: 4307168347523446

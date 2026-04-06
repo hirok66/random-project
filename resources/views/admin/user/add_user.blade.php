@@ -186,7 +186,7 @@
                     $('.error').text('');
                     let formData = new FormData(this);
                     $.ajax({
-                        url: "{{ route('store.user') }}",
+                        url: "{{ url('/admin/add-user') }}",
                         method: "POST",
                         data: formData,
                         contentType: false,
@@ -260,7 +260,7 @@
                     let newStatus = (currentStatus === 'active') ? 'inactive' : 'active';
 
                     $.ajax({
-                        url: "{{ route('user.updateStatus') }}",
+                        url: "{{ route('user.status.change') }}", // এই রাউটটি আপনার রাউট ফাইলে ডিফাইন করা আছে কিনা চেক করুন
                         method: "POST",
                         data: { id: userId, status: newStatus },
                         success: function (response) {
