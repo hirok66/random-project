@@ -14,6 +14,12 @@
                 <div class="col-xxl-4 col-lg-7 col-xl-6 col-md-10 wow fadeInRight">
                     <div class="sign_in_form">
                         <h3>Sign In to Continue 👋</h3>
+
+                        @section('success')
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endsection
                         <form method="post" action="{{ route('gest.login') }}">
                             @csrf
                             <div class="row">

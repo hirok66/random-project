@@ -1,11 +1,12 @@
 
-@forelse ($categorys as $key=> $category )
+@forelse ($subcategories as $key=> $category )
     <tr>
         <td>{{ $key + 1 }}</td>
+        <td>{{ $category-> category->name }}</td>
         <td>{{ $category->name }}</td>
         <td>
             @if ($category->image)
-                <img src="{{ asset('uploads/' . $category->image) }}" alt="{{ $category->name }}" width="50">
+                <img src="{{ asset('frontend/subcategory_images/' . $category->image) }}" alt="{{ $category->name }}" width="50">
             @else
                 <span>No Image</span>
             @endif
@@ -22,10 +23,10 @@
        <td>
     <!-- Edit Button -->
     <button class="btn btn-sm btn-outline-success edit-btn"
-        data-id="{{ $category->id}}"
-        data-name="{{ $category->name}}"
-         data-image="{{ $category->image ?? '' }}"
-        data-status="{{ $category->status}}">
+        data-id="{{ $category->id }}"
+        data-category_id="{{ $category->category_id }}"
+        data-name="{{ $category->name }}"
+        data-status="{{ $category->status }}">
         Edit
     </button>
 

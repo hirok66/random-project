@@ -119,15 +119,17 @@ if ($request->hasFile('image')) {
    $file->move(public_path('uploads'), $filename);
     }
     // ৩. ডাটাবেজ আপডেট
-    $category->update([
-        'name' => $request->name,
-        'status' => $request->status,
-        'image' => $filename, // নতুন বা পুরনো ফাইলের নাম সেভ হবে
-    ]);
+
+        $category->update([
+            'name' => $request->name,
+            'status' => $request->status,
+            'image' => $filename, // নতুন ইমেজের নাম আপডেট করা
+        ]);
+    }
 
     return response()->json(['success' => 'Category updated successfully!']);
 }
-}
+
 
 // status update
 public function status(Request $request)

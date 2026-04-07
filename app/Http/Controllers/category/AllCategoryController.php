@@ -10,7 +10,7 @@ class AllCategoryController extends Controller
 {
     public function allCategory ()
     {
-        $categorys = Category::where('status', 'active')->latest()->paginate(24);
+        $categorys = Category::where('status', 'active')->latest()->paginate(18);
         return view('frontend.category.category',[
             'categorys' => $categorys,
             'pagination' => $categorys->links('pagination.custom')->toHtml(),

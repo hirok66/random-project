@@ -1,135 +1,138 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mt-3">
+        <div class="container mt-3">
 
-        <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <h3>category Management</h3>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add category</button>
-            </div>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h3>category Management</h3>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add category</button>
+                </div>
 
-            <div class="card-body">
+                <div class="card-body">
 
-               <div class="mb-3">
-    <div class="input-group" style="max-width: 300px;">
-        <span class="input-group-text bg-white border-end-0">
-            <i class="fas fa-search text-muted"></i> <!-- FontAwesome Icon -->
-        </span>
-        <input type="text" id="search" class="form-control border-start-0 ps-0" placeholder="Search categorys...">
+                   <div class="mb-3">
+        <div class="input-group" style="max-width: 300px;">
+            <span class="input-group-text bg-white border-end-0">
+                <i class="fas fa-search text-muted"></i> <!-- FontAwesome Icon -->
+            </span>
+            <input type="text" id="search" class="form-control border-start-0 ps-0" placeholder="Search categorys...">
+        </div>
     </div>
-</div>
 
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
 
-                            <th>Sl</th>
-                            <th>Name</th>
-                            <th>Image</th>
-                            <th>Status</th>
-                             <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="categoryTableBody"> <!-- এখানে ডাটা লোড হবে -->
-                        @include('admin.categorys.table')
-                    </tbody>
-                </table>
-                <div id="paginationLinks" class="d-flex justify-content-center mt-4">
-                    {{ $categorys->links() }}
-                </div>
+                                <th>Sl</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Status</th>
+                                 <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTableBody"> <!-- এখানে ডাটা লোড হবে -->
+                            @include('admin.categorys.table')
+                        </tbody>
+                    </table>
+                    <div id="paginationLinks" class="d-flex justify-content-center mt-4">
+                        {{ $categorys->links() }}
+                    </div>
 
-            </div>
-        </div>
-
-        <!-- Add category Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form id="formData" enctype="multipart/form-data">
-
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add category</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" name="name">
-                                @error('name')
-                                    <div class="text-danger error">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="image" class="form-label">Image</label>
-                                <input type="file" class="form-control" id="image" name="image">
-                                @error('image')
-                                    <div class="text-danger error">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add</button>
-                        </div>
-                    </form>
                 </div>
             </div>
-        </div>
-        <!-- edit category Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+
+            <!-- Add category Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="formData" enctype="multipart/form-data">
+
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add category</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name">
+                                    @error('name')
+                                        <div class="text-danger error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Image</label>
+                                    <input type="file" class="form-control" id="image" name="image">
+                                    @error('image')
+                                        <div class="text-danger error">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
 
-
-
-            <form id="editData" enctype="multipart/form-data"> <!-- এডিট করার জন্য আলাদা আইডি -->
-                @csrf
-                <!-- ইউজারের আইডি ধরার জন্য নিচের হিডেন ইনপুটটি অবশ্যই লাগবে -->
-                <input type="hidden" id="editcategoryId" name="id">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="editname" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="editname" name="name">
-                        <div class="text-danger error-edit-name"></div> <!-- AJAX এররের জন্য -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label for="editimage" class="form-label">Image</label>
-                        <input type="file" class="form-control" id="editimage" name="image">
-                        <div class="text-danger error-edit-image"></div> <!-- AJAX এররের জন্য -->
-                    </div>
-
-
-                    <div class="mb-3">
-                        <label for="editstatus" class="form-label">Status</label>
-                        <select class="form-control" id="editstatus" name="status">
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
-
-
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Update Changes</button> <!-- টেক্সট পরিবর্তন -->
-                </div>
-            </form>
-        </div>
+            </div>
+            <!-- edit category Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+
+
+
+                <form id="editData" enctype="multipart/form-data"> <!-- এডিট করার জন্য আলাদা আইডি -->
+                    @csrf
+                    <!-- ইউজারের আইডি ধরার জন্য নিচের হিডেন ইনপুটটি অবশ্যই লাগবে -->
+                    <input type="hidden" id="editcategoryId" name="id">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit category</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="editname" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="editname" name="name">
+                            <div class="text-danger error-edit-name"></div> <!-- AJAX এররের জন্য -->
+                        </div>
+                        <div class="mb-3">
+    <label for="editimage" class="form-label">Image</label>
+    <input type="file" class="form-control" id="editimage" name="image">
+    <!-- এখানে ইমেজ প্রিভিউ দেখাবে -->
+    <div class="mt-2">
+        <img id="showOldImage" src="" width="80" class="img-thumbnail" style="display:none;">
     </div>
 </div>
 
 
+                        <div class="mb-3">
+                            <label for="editstatus" class="form-label">Status</label>
+                            <select class="form-control" id="editstatus" name="status">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Update Changes</button> <!-- টেক্সট পরিবর্তন -->
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+
+
+        </div>
 @endsection
 
 
@@ -188,7 +191,12 @@
 
                     $('#editcategoryId').val(id);
                     $('#editname').val(name);
-                    $('#editimage').val(image);
+                     // ইমেজ প্রিভিউ সেট করা (আপনার ফোল্ডারের নাম 'uploads' হলে)
+    if (image) {
+        $('#showOldImage').attr('src', "{{ asset('uploads') }}/" + image).show();
+    } else {
+        $('#showOldImage').hide();
+    }
                     $('#editstatus').val(status);
                     $('#editModal').modal('show');
                 });
@@ -198,7 +206,7 @@
                     e.preventDefault();
                     let formData = new FormData(this);
                     $.ajax({
-                        url: "{{ url('/admin/categories') }}", // রাউটটি চেক করে নিন
+                        url: "{{ url('/admin/categories/update') }}", // রাউটটি চেক করে নিন
                         method: "POST",
                         data: formData,
                         contentType: false,

@@ -6,6 +6,7 @@ use App\Http\Controllers\FrontendLoginController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PasswordRestContrller;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\Tag;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
@@ -51,8 +52,19 @@ Route::get('/admin/dashboard', [UserController::class, 'index'])->name('admin.da
     Route::get('/admin/categories/fetch', [CategoryController::class, 'fetch'])->name('category.fetch');
     Route::post('/admin/categories/edit', [CategoryController::class, 'edit'])->name('category.updateStatus');
 
-    Route::post('/admin/categories', [CategoryController::class, 'update'])->name('category.update');
+    Route::post('/admin/categories/update', [CategoryController::class, 'update'])->name('category.update');
     Route::delete('/admin/category/delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+
+
+    // SubCategoryController
+    Route::get('/admin/subcategories', [SubCategoryController::class, 'index'])->name('SubCategoryController.index');
+    Route::get('/admin/subcategories/create', [SubCategoryController::class, 'create'])->name('SubCategoryController.create');
+    Route::post('/admin/subcategories/store', [SubCategoryController::class, 'store'])->name('store.SubCategoryController');
+    Route::get('/admin/subcategories/status', [SubCategoryController::class, 'status'])->name('SubCategoryController.status');
+    Route::get('/admin/subcategories/fetch', [SubCategoryController::class, 'fetch'])->name('SubCategoryController.fetch');
+    Route::post('/admin/subcategories/edit', [SubCategoryController::class, 'edit'])->name('SubCategoryController.updateStatus');
+    Route::post('/admin/subcategories/update', [SubCategoryController::class, 'update'])->name('SubCategoryController.update');
+    Route::delete('/admin/subcategories/delete/{id}', [SubCategoryController::class, 'delete'])->name('SubCategoryController.delete');
 
 
     // tages

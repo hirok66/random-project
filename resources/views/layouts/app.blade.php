@@ -191,6 +191,15 @@
                     </li>
                       @endif
 
+                    @if(Auth::user()->role== 'admin')
+                    <li class="side-nav-item">
+                        <a href="{{ url('/admin/subcategories') }}" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="chart-bar-stacked"></i> </span>
+                            <span class="menu-text" data-lang="chat">SubCategory </span>
+                        </a>
+                    </li>
+                      @endif
+
                      @if(Auth::user()->role== 'admin')
                     <li class="side-nav-item">
                         <a href="{{ url('/admin/tages') }}" class="side-nav-link">
