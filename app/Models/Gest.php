@@ -14,7 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
 
-#[Guarded (['name', 'email', 'password','role', 'status', 'last_seen','created_at', 'updated_at','remember_token'])]
+#[Guarded (['id'])]
 #[Hidden(['password', 'remember_token'])]
 class Gest extends Authenticatable
 {

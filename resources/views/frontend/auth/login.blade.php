@@ -15,11 +15,11 @@
                     <div class="sign_in_form">
                         <h3>Sign In to Continue 👋</h3>
 
-                        @section('success')
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endsection
+                        @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
                         <form method="post" action="{{ route('gest.login') }}">
                             @csrf
                             <div class="row">

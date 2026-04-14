@@ -36,9 +36,9 @@
 
 
                         <div class="col-xl-2 col-6 col-sm-4 col-md-3 wow fadeInUp">
-                            <a href="shop.html" class="category_item">
+                            <a href="{{ route('shop.page') }}" class="category_item">
                                 <div class="img">
-                                    <img src={{ asset('/uploads/' . $category->image) }} alt="Category" class="img-fluid w-100">
+                                    <img src={{ asset('images/categories/' . $category->image) }} alt="Category" class="img-fluid w-100">
                                 </div>
                                 <h3> {{ $category->name }}</h3>
                             </a>

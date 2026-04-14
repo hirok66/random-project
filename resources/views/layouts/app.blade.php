@@ -14,6 +14,9 @@
     <meta name="keywords" content="UBold, admin dashboard, ThemeForest, Bootstrap 5 admin, responsive admin, CRM dashboard, CMS admin, web app UI, admin theme, premium admin template">
     <meta name="author" content="Coderthemes">
 
+    <!-- Summer note -->
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('assets') }}/images/favicon.ico">
 
@@ -184,7 +187,7 @@
                     <li class="side-nav-title" data-lang="apps-title">MODULE</li>
                     @if(Auth::user()->role== 'admin')
                     <li class="side-nav-item">
-                        <a href="{{ url('/admin/categories') }}" class="side-nav-link">
+                        <a href="{{ route('admin.category.index') }}" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="chart-bar-stacked"></i> </span>
                             <span class="menu-text" data-lang="chat"> Category </span>
                         </a>
@@ -193,7 +196,7 @@
 
                     @if(Auth::user()->role== 'admin')
                     <li class="side-nav-item">
-                        <a href="{{ url('/admin/subcategories') }}" class="side-nav-link">
+                        <a href="{{ route('admin.subcategory.index') }}" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="chart-bar-stacked"></i> </span>
                             <span class="menu-text" data-lang="chat">SubCategory </span>
                         </a>
@@ -203,37 +206,32 @@
                      @if(Auth::user()->role== 'admin')
                     <li class="side-nav-item">
                         <a href="{{ url('/admin/tages') }}" class="side-nav-link">
-                            <span class="menu-icon"><i data-lucide="tage"></i></span>
+                            <span class="menu-icon"><i data-lucide="tags"></i> </span>
                             <span class="menu-text" data-lang="calendar">Tage </span>
                         </a>
                     </li>
                  @endif
 
-                    <li class="side-nav-item">
-                        <a href="file-manager.html" class="side-nav-link">
-                            <span class="menu-icon"><i data-lucide="folder-open-dot"></i></span>
-                            <span class="menu-text" data-lang="file-manager"> File Manager </span>
-                        </a>
-                    </li>
+
 
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false" aria-controls="sidebarEcommerce" class="side-nav-link">
-                            <span class="menu-icon"><i data-lucide="shopping-bag"></i></span>
-                            <span class="menu-text" data-lang="ecommerce">Ecommerce</span>
+                            <span class="menu-icon"><i data-lucide="store"></i></span>
+                            <span class="menu-text" data-lang="ecommerce">Shops</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <div class="collapse" id="sidebarEcommerce">
                             <ul class="sub-menu">
                                 <li class="side-nav-item">
                                     <a data-bs-toggle="collapse" href="#sidebarProducts" aria-expanded="false" aria-controls="sidebarProducts" class="side-nav-link">
-                                        <span class="menu-text" data-lang="eco-products">Products</span>
+                                        <span class="menu-text" data-lang="eco-products">shop</span>
                                         <span class="menu-arrow"></span>
                                     </a>
                                     <div class="collapse" id="sidebarProducts">
                                         <ul class="sub-menu">
                                             <li class="side-nav-item">
-                                                <a href="ecommerce-products.html" class="side-nav-link">
-                                                    <span class="menu-text" data-lang="eco-pro-listing">Listing</span>
+                                                <a href="{{ route('admin.shops') }}" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="eco-pro-listing">Shop</span>
                                                 </a>
                                             </li>
                                             <li class="side-nav-item">
@@ -1650,10 +1648,19 @@
                 <div class="d-flex align-items-center gap-2">
 
                     <!-- Search -->
-                    <div class="app-search d-none d-xl-flex me-2">
-                        <input type="search" class="form-control topbar-search rounded-pill" name="search" placeholder="Quick Search...">
-                        <i data-lucide="search" class="app-search-icon text-muted"></i>
-                    </div>
+                        @if(session('error'))
+    <div class="alert alert-danger text-center">
+        {{ session('error') }}
+    </div>
+@endif
+                    <form action="{{ route('admin.search') }}" method="GET">
+                        @csrf
+
+                        <div class="app-search d-none d-xl-flex me-2">
+                            <input type="search" class="form-control topbar-search rounded-pill" name="search" placeholder="Quick Search...">
+                            <i data-lucide="search" class="app-search-icon text-muted"></i>
+                        </div>
+                    </form>
 
                     <!-- Language Dropdown -->
                     <div class="topbar-item">
@@ -2470,6 +2477,9 @@
 <!-- jQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- summer note --}}
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+
 <script>
     $.ajaxSetup({
         headers: {

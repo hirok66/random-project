@@ -1,6 +1,6 @@
 /****************************************
 Template Name: iMart - Multipurpose eCommerce HTML Template.
-Author: NarzoTech 
+Author: NarzoTech
 Author Email: contact.narzotech@gmail.com
 Version: 1.0
 Description: iMart is a cutting-edge, feature-rich, and completely responsive e-commerce HTML template made for all kinds of online retailers. Whether you own a multi-category marketplace, electronics store, grocery store, furniture store, fashion boutique, or beauty items, iMart offers a chic and effective way to create the ideal e-commerce website. It fits perfectly on various displays and resolutions from regular desktop screens to tablets, iPads, iPhones and small mobile devices.
@@ -8,7 +8,7 @@ Description: iMart is a cutting-edge, feature-rich, and completely responsive e-
 
 CSS INDEX
 ===================================
-01. GLOBAL CSS 
+01. GLOBAL CSS
 02. HOME PAGE 01
 03. HOME FASHION 02
 04. HOME GROCERY
@@ -21,7 +21,7 @@ CSS INDEX
 11. VENDOR PAGE
 12. VENDOR DETAILS
 13. BECOME A VENDOR
-14. CART VIEW 
+14. CART VIEW
 15. WISHLIST
 16. CHECKOUT
 17. PAYMENT SUCCESS
@@ -3444,7 +3444,8 @@ footer {
 }
 
 .main_menu_2 .menu_icon li a.user b img {
-    filter: brightness(0) saturate(100%) invert(75%) sepia(68%) saturate(3040%) hue-rotate(358deg) brightness(99%) contrast(103%);
+    filter: none;
+
 }
 
 .default_home .mini_cart .offcanvas-header {

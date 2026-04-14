@@ -1,315 +1,461 @@
 @extends('layouts.app')
-
 @section('content')
-    <div class="container mt-3">
+                {{-- style start --}}
+                <style>
+                    .google-search-box {
+                        position: relative;
+                        width: 100%;
+                    }
 
-        <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <h3>category Management</h3>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add category</button>
-            </div>
+                    .google-input {
+                        padding-left: 40px;
+                        /* icon space */
+                        height: 45px;
+                        border-radius: 25px;
+                        border: 1px solid #ddd;
+                        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+                        transition: all 0.3s;
+                    }
 
-            <div class="card-body">
+                    .google-input:focus {
+                        border-color: #4285f4;
+                        box-shadow: 0 0 5px rgba(66, 133, 244, 0.5);
+                    }
 
-               <div class="mb-3">
-    <div class="input-group" style="max-width: 300px;">
-        <span class="input-group-text bg-white border-end-0">
-            <i class="fas fa-search text-muted"></i> <!-- FontAwesome Icon -->
-        </span>
-        <input type="text" id="search" class="form-control border-start-0 ps-0" placeholder="Search categorys...">
-    </div>
-</div>
+                    .search-icon {
+                        position: absolute;
+                        top: 50%;
+                        left: 14px;
+                        transform: translateY(-50%);
+                        font-size: 16px;
+                        color: #777;
+                    }
+                </style>
 
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
+                {{-- style end --}}
 
-                            <th>Sl</th>
 
-                            <th>Category</th>
-                            <th>Name</th>
-                            <th>Image</th>
-                            <th>Status</th>
-                             <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="categoryTableBody"> <!-- এখানে ডাটা লোড হবে -->
-                        @include('admin.subcategory.table')
-                    </tbody>
-                </table>
-                <div id="paginationLinks" class="d-flex justify-content-center mt-4">
-                    {{ $subcategories->links() }}
-                </div>
+                <div class="container mt-3">
 
-            </div>
-        </div>
-
-        <!-- Add category Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form id="formData" enctype="multipart/form-data">
-
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add category</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <h3></h3>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add User</button>
                         </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Category</label>
-                                <select name="category_id" id="category_id" class="form-control">
-                                    <option value="">Select Category</option>
-                                    @foreach($categorys as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
 
-                                @error('name')
-                                    <div class="text-danger error">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="card-body">
 
                             <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" name="name">
-                                @error('name')
-                                    <div class="text-danger error">{{ $message }}</div>
-                                @enderror
+                                <div class="google-search-box">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" id="search" class="form-control google-input" placeholder="Search users...">
+                                </div>
                             </div>
                             <div class="mb-3">
-                                <label for="image" class="form-label">Image</label>
-                                <input type="file" class="form-control" id="image" name="image">
-                                @error('image')
-                                    <div class="text-danger error">{{ $message }}</div>
-                                @enderror
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl</th>
+                                            <th>category</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Image</th>
+                                            <th>Order</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="userTableBody">
+                                      @include('admin.subcategory.table')
+                                    </tbody>
+                                </table>
+
+                                <div id="paginationLinks" class="d-flex justify-content-center mt-4">
+                                    {{ $subcategorys->links() }}
+                                </div>
                             </div>
 
 
+
+                     <!------------------------  start Add User Modal ------------------->
+
+            <!-- Add User Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form id="formData">
+                                    @csrf
+                                    <div class="modal-header">
+                                        <h3 class="modal-title" id="exampleModalLabel">Add User</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                            <div class="mb-3">
+                                            <label for="editStatus" class="form-label">Status <span class="text-danger">*</span></label>
+                                            <select name="category_id" id="category_id" class="form-control form-select">
+                                                <option value="active">Select Category</option>
+                                                @foreach ($categories as $category )
+
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="name" name="name">
+                                            @error('name')
+                                                <div class="text-danger error_error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                         {{-- <div class="mb-3">
+                                            <label for="editStatus" class="form-label">Status <span class="text-danger">*</span></label>
+                                            <select name="order" id="order_id" class="form-control form-select">
+                                                <option value="active">Select Category</option>
+                                                @foreach ($subcategory as $category )
+
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div> --}}
+
+
+
+
+                                         <div class="mb-3">
+                                            <label for="name" class="form-label">Image <span class="text-danger">*</span></label>
+                                            <input type="file" class="form-control" id="image" name="image"  onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+                                            @error('image')
+                                                <div class="text-danger error_error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                         <div class="mb-3">
+                               <img id="blah" alt="your image" width="100" height="100" />
+                                        </div>
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+
+
+                    <!------------------------  end Add User Modal ------------------->
+
+                     <!------------------------  start Edit  User Modal ------------------->
+
+            <!-- Add User Modal -->
+                    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form id="editformData">
+                                    @csrf
+                                    <div class="modal-header">
+                                        <h3 class="modal-title" id="exampleModalLabel">Add User</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+
+                                            <input type="hidden" class="form-control" id="editUserId" name="id">
+
+                                        </div>
+
+                                         <div class="mb-3">
+                                            <label for="editStatus" class="form-label">Status <span class="text-danger">*</span></label>
+                                            <select name="category_id" id="category_id" class="form-control form-select">
+                                                <option value="active">Select Category</option>
+                                                @foreach ($categories as $category )
+
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="editName" name="name">
+                                            @error('name')
+                                                <div class="text-danger error_error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+
+                                        <div class="mb-3">
+                                            <label for="editorder" class="form-label">Order <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control" id="editorder" name="order">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="editStatus" class="form-label">Status <span class="text-danger">*</span></label>
+                                            <select name="status" id="editStatus" class="form-control form-select">
+                                                <option value="active">Active</option>
+                                                <option value="inactive">Inactive</option>
+                                            </select>
+                                        </div>
+
+
+
+                                         <div class="mb-3">
+                                            <label for="name" class="form-label">Image <span class="text-danger">*</span></label>
+                                            <input type="file" class="form-control" id="editImage" name="image" onchange="document.getElementById('editBlah').src = window.URL.createObjectURL(this.files[0])" >
+                                            @error('image')
+                                                <div class="text-danger error_error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                         <div class="mb-3">
+                               <img id="editBlah" src="" alt="your image" width="100" height="100" />
+                                        </div>
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- edit category Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-
-
-
-            <form id="editData" enctype="multipart/form-data"> <!-- এডিট করার জন্য আলাদা আইডি -->
-                @csrf
-                <!-- ইউজারের আইডি ধরার জন্য নিচের হিডেন ইনপুটটি অবশ্যই লাগবে -->
-                <input type="hidden" id="editcategoryId" name="id">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="editname" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="editname" name="name">
-                        <div class="text-danger error-edit-name"></div> <!-- AJAX এররের জন্য -->
-                    </div>
-                    <div class="mb-3">
-                        <label for="editcategory_id" class="form-label">Category</label>
-                        <select name="category_id" id="editcategory_id" class="form-control">
-                            <option value="">Select Category</option>
-                            @foreach($categorys as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editimage" class="form-label">Image</label>
-                        <input type="file" class="form-control" id="editimage" name="image">
-                        <div class="text-danger error-edit-image"></div> <!-- AJAX এররের জন্য -->
                     </div>
 
 
-                    <div class="mb-3">
-                        <label for="editstatus" class="form-label">Status</label>
-                        <select class="form-control" id="editstatus" name="status">
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
+                    <!------------------------  end Edit  User Modal ------------------->
+
+
+
+
+
+                        </div>
                     </div>
-
-
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Update Changes</button> <!-- টেক্সট পরিবর্তন -->
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 
-    </div>
-@endsection
+            @endsection
+            {{-- footer --}}
+
+            @section('footer')
+
+                <script>
 
 
-    @section('footer')
-        <script>
-            $(document).ready(function () {
-                $.ajaxSetup({
-                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
-                });
+            $(document).ready(function() {
+                // 1. Initialize Summernote and UI
+                $('#summernote').summernote();
+                fetchsubcategory(); // Load data on page load
 
-
-
-                // ২. পেজিনেশন লিঙ্কে ক্লিক করলে ডাটা লোড
-                $(document).on('click', '#paginationLinks a', function (e) {
+                // 2. Handle form submission
+                $('#formData').submit(function(e) {
                     e.preventDefault();
-                    let page = $(this).attr('href').split('page=')[1];
-                    fetchData(page);
-                });
 
-                // ৩. নতুন ইউজার অ্যাড করা
-                $('#formData').on('submit', function (e) {
-                    e.preventDefault();
-                    $('.error').text('');
-                    let formData = new FormData(this);
+
+
+                    $('.text-danger').text('');
+                    var formData = new FormData(this);
+
                     $.ajax({
-                        url: "{{ url('/admin/subcategories/store') }}",
-                        method: "POST",
+                        url: "{{ route('admin.subcategory.store') }}",
+                        type: "POST",
                         data: formData,
                         contentType: false,
                         processData: false,
-                        success: function (response) {
+                        success: function(response) {
                             Swal.fire({
-                                title: "New category Added Successfully",
+                                title: "Success!",
+                                text: response.message,
                                 icon: "success",
-                                draggable: true
                             });
                             $('#exampleModal').modal('hide');
-                            $('#formData')[0].reset();
-                            fetchData();
+                            $('#formData')[0].reset(); // Reset form
+                            $('#summernote').summernote('reset'); // Reset editor
+                            $('#blah').attr('src', ''); // Clear preview
+                            fetchsubcategory(); // Refresh table
                         },
-                        error: function (error) {
-                            let errors = error.responseJSON.errors;
-                            $.each(errors, function (key, value) {
-                                $('[name="' + key + '"]').siblings('.error').text(value[0]);
-                            });
+                        error: function(xhr) {
+                            if (xhr.status === 422) {
+                                let errors = xhr.responseJSON.errors;
+                                $.each(errors, function(key, value) {
+                                   $('.'+key+"_error").text(value[0]);
+                                });
+                            }
                         }
                     });
                 });
 
-                // ৪. এডিট বাটনে ক্লিক করে মোডালে ডাটা আনা
-                $(document).on('click', '.edit-btn', function() {
-                    let id = $(this).data('id');
-                    let name = $(this).data('name');
-                    let category_id = $(this).data('category_id');
-                    let image = $(this).data('image');
-                    let status = $(this).data('status');
-
-                    $('#editcategoryId').val(id);
-                    $('#editname').val(name);
-                    $('#editcategory_id').val(category_id);
-                    $('#editimage').val(image);
-                    $('#editstatus').val(status);
-                    $('#editModal').modal('show');
-                });
-
-                // ৫. ডাটা আপডেট করা
-                $('#editData').on('submit', function (e) {
-                    e.preventDefault();
-                    let formData = new FormData(this);
-                    $.ajax({
-                        url: "{{ url('/admin/subcategories/update') }}", // রাউটটি চেক করে নিন
-                        method: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            Swal.fire({
-                                title: "Data update Successfully",
-                                icon: "success",
-                                draggable: true
-                            });
-                            $('#editModal').modal('hide');
-                            fetchData();
-                        }
-                    });
-                });
+                // 3. Fetch data function (Keep inside or outside ready, but must be called)
 
 
-                // ৭. update পরিবর্তন
-                $(document).on('click', '.change-status', function () {
-                    let btn = $(this);
-                    let categoryId = btn.data('id');
-                    let currentStatus = btn.data('status');
-                    let newStatus = (currentStatus === 'active') ? 'inactive' : 'active';
 
-                    $.ajax({
-                        url: "{{ url('/admin/subcategories/edit') }}",
-                        method: "POST",
-                        data: { id: categoryId, status: newStatus },
-                        success: function (response) {
-                            fetchData(); // সরাসরি টেবিল রিফ্রেশ করা ভালো
-                            Swal.fire({
-                                title: "Update Successfully",
-                                icon: "success",
-                                draggable: true
 
-                            });
-                             fetchData();
-                        }
-                    });
-                });
-                // ৭. স্ট্যাটাস পরিবর্তন
-                $(document).on('click', '.status', function () {
-                    let btn = $(this);
-                    let categoryId = btn.data('id');
-                    let currentStatus = btn.data('status');
-                    let newStatus = (currentStatus === 'active') ? 'inactive' : 'active';
 
-                    $.ajax({
-                        url: "{{ url('/admin/subcategories/status') }}",
-                        method: "get",
-                        data: { id: categoryId, status: newStatus },
-                        success: function (response) {
-                            fetchData(); // সরাসরি টেবিল রিফ্রেশ করা ভালো
-                            Swal.fire({
-                                title: "Update Successfully",
-                                icon: "success",
-                                draggable: true
 
-                            });
-                             fetchData();
-                        }
-                    });
-                });
+                <!--------------------------------------------- 4. Handle status change (Example for category status toggle) ---------------------------->
+$(document).ready(function () {
 
-                // SEARCH
-                $(document).on('keyup', '#search', function() {
-            let query = $(this).val();
-            fetchData(1, query); // fetchData ফাংশনে কুয়েরি পাঠানো হচ্ছে
+    // 🔄 INITIAL LOAD
+    fetchsubcategory();
+
+    let delayTimer;
+
+    // 🔍 LIVE SEARCH (debounce)
+    $(document).on('keyup', '#search', function () {
+
+        clearTimeout(delayTimer);
+
+        let query = $(this).val();
+
+        delayTimer = setTimeout(function () {
+            fetchsubcategory(query, 1);
+        }, 300);
+
+    });
+
+    // 🔢 PAGINATION CLICK
+    $(document).on('click', '#paginationLinks a', function (e) {
+        e.preventDefault();
+
+        let page = $(this).attr('href').split('page=')[1] || 1;
+        let query = $('#search').val();
+
+        fetchsubcategory(query, page);
+    });
+
+});
+
+
+// 🔄 FETCH FUNCTION (UPDATED)
+
+
+
+
+function fetchsubcategory(query = '', page = 1) {
+        $.ajax({
+            url: "{{ route('admin.subcategory.fetch') }}",
+            type: "GET",
+            data: {
+                query: query,
+                page: page
+            },
+            success: function(response) {
+                $('#userTableBody').html(response.table);
+                $('#paginationLinks').html(response.pagination);
+            }
         });
+    }
 
-   function fetchData(page = 1, search = '') {
+            <!--------------------------------------------- 4. Handle status change (Example for category status toggle) ---------------------------->
+
+              $(document).on('click', '.change-status', function () {
+
+    let id = $(this).data('id');
+    let status = $(this).data('status');
+
+    let newStatus = (status === 'active') ? 'inactive' : 'active';
+
     $.ajax({
-        url: "{{ url('/admin/subcategories/fetch') }}?page=" + page,
-        type: "GET",
-        data: { search: search },
-        success: function (response) {
-            $('#categoryTableBody').html(response.table);
-            $('#paginationLinks').html(response.pagination);
+        url: "{{ route('admin.subcategory.status') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            id: id,
+            status: newStatus
         },
-        error: function(xhr) {
-            console.log(xhr.responseText);
+        success: function (response) {
+            Swal.fire("Success!", response.message, "success");
+            fetchsubcategory();
         }
     });
-}
+
+});
+
+
+            <!--------------------------------------------- 5. Handle edit change (Example for category status toggle) ---------------------------->
+            $(document).on('click', '.edit-btn', function(e) {
+                e.preventDefault();
+
+
+
+                let id          = $(this).data('id');
+                let name        = $(this).data('name');
+                let category_id = $(this).data('category_id');
+                let order       = $(this).data('order');
+                let status      = $(this).data('status');
+                let description = $(this).data('description');
+                let image       = $(this).data('image'); // ডাটাবেসের ইমেজ নাম
+
+                $('#editUserId').val(id);
+                $('#editcategory_id').val(category_id);
+                $('#editName').val(name);
+                $('#editorder').val(order);
+                $('#editSummernote').summernote('code', description);
+
+                // ইমেজ প্রিভিউ সেট করা
+                if (image && image !== "") {
+                    // টেবিলের পাথের সাথে মিল রেখে এখানে পাথ দিন
+                    let imageUrl = "{{ asset('images/subcategory') }}/" + image;
+                    $('#editBlah').attr('src', imageUrl).show();
+                } else {
+                    // ইমেজ না থাকলে প্লেসহোল্ডার
+                    $('#editBlah').attr('src', "{{ asset('no-image.png') }}").show();
+                }
+
+                $('#editModal').modal('show');
+            });
+
+
+            <!--------------------------------------------- 5. Handle update change (Example for category status toggle) ---------------------------->
+           $(document).ready(function() {
+
+
+            // এডিট ফর্ম সাবমিট হ্যান্ডেল করা
+            $(document).on('submit', '#editformData', function(e) {
+                e.preventDefault();
+
+                // Summernote এর ভ্যালু সিঙ্ক করা
+                if($('#editSummernote').length) {
+                    $('#editSummernote').val($('#editSummernote').summernote('code'));
+                }
+
+                let id = $('#editUserId').val();
+                let formData = new FormData(this);
+
+                $.ajax({
+                    url: "{{ url('admin/subcategory/update') }}/" + id,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        Swal.fire({
+                            title: "Updated!",
+                            text: response.message,
+                            icon: "success",
+                            timer: 2000
+                        });
+                        $('#editModal').modal('hide');
+                        fetchsubcategory(); // টেবিল রিফ্রেশ করবে
+                    },
+                    error: function(xhr) {
+                        $('.error').remove();
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            $.each(errors, function(key, value) {
+                                $('[name="'+key+'"]').after('<div class="text-danger error">' + value[0] + '</div>');
+                            });
+                        } else {
+                            Swal.fire("Error!", "Update failed", "error");
+                        }
+                    }
+                });
+            });
+        });
+
+// delete
 
           // ৬. ডাটা ডিলিট করা (SweetAlert2 + AJAX)
         $(document).on('click', '.delete-btn', function() {
@@ -327,16 +473,16 @@
                 if (result.isConfirmed) {
                     // AJAX এর মাধ্যমে ডিলিট রিকোয়েস্ট
                     $.ajax({
-                        url: "/admin/subcategories/delete/" + id,
+                      url: "{{ url('admin/subcategory/delete') }}/" + id,
                         method: "DELETE",
                         success: function(response) {
-
+                            // ডিলিট সফল হলে কনফার্মেশন মেসেজ
                             Swal.fire({
                                 title: "Deleted!",
-                                text: "The category has been deleted.",
+                                text: "The user has been deleted.",
                                 icon: "success"
                             });
-                            fetchData(); // টেবিল রিফ্রেশ
+                            fetchsubcategory(); // টেবিল রিফ্রেশ
                         },
                         error: function(err) {
                             Swal.fire({
@@ -349,12 +495,11 @@
                 }
             });
         });
-                // পেজ লোড হলে ডাটা দেখাবে
-                fetchData();
-            });
-        </script>
-    @endsection
+
+            }); // Only one closing bracket needed here
 
 
 
 
+                </script>
+@endsection

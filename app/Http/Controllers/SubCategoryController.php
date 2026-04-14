@@ -3,176 +3,141 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use App\Models\SubCategory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 class SubCategoryController extends Controller
 {
-
-   public function index()
+    // ================= INDEX =================
+    public function index()
     {
-        // Fetch categorys ordered by last_seen descending, 10 per page
-        $categorys = Category::orderBy('id', 'desc')->paginate(10);
-        $subcategories = SubCategory::orderBy('id', 'desc')->paginate(10);
+        $categories = Category::where('status', 'active')->get();
+        $subcategorys = SubCategory::latest()->paginate(10);
 
-        // Pass categorys to admin.dashboard view
-        return view('admin.subcategory.index', [
-            'categorys' => $categorys,
-            'subcategories' => $subcategories
-        ]);
+        return view('admin.subcategory.index', compact('categories', 'subcategorys'));
     }
 
-    // create category form
-    public function create()
+    // ================= STORE =================
+    public function store(Request $request)
     {
-        $categorys = Category::orderBy('id', 'desc')->paginate(10);
-        return view('admin.subcategory.create',
-        [
-            'categorys'=>$categorys,
+        $request->validate([
+            'category_id' => 'required|integer|exists:categories,id',
+            'name'        => 'required|string|max:255',
+            'image'       => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-    }
-    // store category
-   public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        'category_id' => 'required|exists:categories,id',
 
-    ]);
+        $imageName = null;
 
-
-
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $filename = time() . '.webp';
-   $file->move(public_path('frontend/subcategory_images'), $filename);
-    }
-
-
-        SubCategory::create([
-            'name'   => $request->name,
-            'image'  => $filename,
-            'category_id' => $request->category_id,
-            'status' => 'active',
-        ]);
-        return response()->json(['message' => 'SubCategory created successfully']);
-
-
-}
-
-
-
-    // updateStatus
-    public function updateStatus(Request $request)
-    {
-
-
-        $subcategory = SubCategory::findOrFail($request->id);
-        $subcategory->status = $request->status;
-        $subcategory->save();
-
-        return response()->json(['success' => true]);
-
-    }
-
-// fetch
-public function fetch(Request $request) {
-    $search = $request->search;
-
-    $subcategories = SubCategory::when($search, function($query) use ($search) {
-        $query->where('name', 'LIKE', "%{$search}%")
-              ->orWhere('status', 'LIKE', "%{$search}%");
-    })
-    ->orderBy('id', 'desc')
-    ->paginate(10);
-
-    return response()->json([
-        'table' => view('admin.subcategory.table', compact('subcategories'))->render(),
-        'pagination' => $subcategories->links()->toHtml()
-    ]);
-}
-
-// update
-
-
-public function update(Request $request)
-{
-    // ১. ভ্যালিডেশন (সঠিক টেবিল নাম দিন, ধরুন 'sub_categories')
-    $request->validate([
-        'id' => 'required|exists:sub_categories,id',
-        'name' => 'required|string|max:255',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        'category_id' => 'required|exists:categories,id|nullable',
-        'status' => 'required|nullable|string|in:active,inactive',
-    ]);
-
-    $subcategory = SubCategory::findOrFail($request->id);
-    $filename = $subcategory->image; // ডিফল্ট আগের নাম
-
-    // ২. ইমেজ হ্যান্ডলিং
-    if ($request->hasFile('image')) {
-        // পুরনো ইমেজ ডিলিট করা
-        if ($subcategory->image && File::exists(public_path('frontend/subcategory_images/' . $subcategory->image))) {
-            File::delete(public_path('frontend/subcategory_images/' . $subcategory->image));
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/subcategory'), $imageName);
         }
 
-        // নতুন ইমেজ আপলোড
-        $file = $request->file('image');
-        $filename = time() . '.' . $file->getClientOriginalExtension(); // বা '.webp' দিতে পারেন
-        $file->move(public_path('frontend/subcategory_images'), $filename);
+        SubCategory::create([
+            'name'        => $request->name,
+            'category_id' => $request->category_id,
+            'image'       => $imageName,
+            'status'      => 'active',
+            'order'       => 0,
+            'slug'        => Str::slug($request->name) . '-' . time(),
+        ]);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'SubCategory created successfully!'
+        ]);
     }
 
-    // ৩. ডাটাবেজ আপডেট
-   if($request->image== null){
-    $subcategory->update([
-        'name' => $request->name,
-        'category_id' => $request->category_id,
-        'status' => $request->status,
-    ]);
-   }else{
-    $subcategory->update([
-        'name' => $request->name,
-        'category_id' => $request->category_id,
-        'status' => $request->status,
-        'image' => $filename, // নতুন ইমেজের নাম সেভ হবে
-    ]);
-   }
+    // ================= FETCH (AJAX) =================
+  public function fetch(Request $request)
+{
+    $query = SubCategory::with('category');
 
-    return response()->json(['success' => 'SubCategory updated successfully!']);
+   if ($request->filled('query')) {
+    $search = $request->query;
+
+    $query->where(function($q) use ($search) {
+        $q->where('name', 'like', "%{$search}%")
+          ->orWhere('slug', 'like', "%{$search}%")
+          ->orWhere('status', 'like', "%{$search}%");
+    });
 }
 
+    $subcategorys = $query->latest()->paginate(5);
 
-
-// status update
-public function status(Request $request)
+    return response()->json([
+        'table' => view('admin.subcategory.table', compact('subcategorys'))->render(),
+        'pagination' => $subcategorys->links()->toHtml()
+    ]);
+}
+    // ================= STATUS CHANGE =================
+    public function status(Request $request)
     {
         $subcategory = SubCategory::findOrFail($request->id);
         $subcategory->status = $request->status;
         $subcategory->save();
 
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Status updated'
+        ]);
     }
 
-// delete
+    // ================= UPDATE =================
+    public function update(Request $request, $id)
+    {
+        $subcategory = SubCategory::findOrFail($id);
 
+        $request->validate([
+            'name'        => 'required|string|max:255',
+            'category_id' => 'required|integer|exists:categories,id',
+            'status'      => 'required|string',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
 
+        $data = [
+            'name'        => $request->name,
+            'category_id' => $request->category_id,
+            'status'      => $request->status,
+            'order'       => $request->order ?? 0,
+            'slug'        => Str::slug($request->name) . '-' . time(),
+        ];
 
-public function delete($id)
-{
-    // ১. প্রথমে আইডি দিয়ে সাবক্যাটাগরি খুঁজে বের করুন
-    $subcategory = SubCategory::findOrFail($id);
+        if ($request->hasFile('image')) {
 
-    // ২. ফোল্ডার থেকে ইমেজটি ডিলিট করুন (যদি থাকে)
-    if ($subcategory->image && File::exists(public_path('frontend/subcategory_images/' . $subcategory->image))) {
-        File::delete(public_path('frontend/subcategory_images/' . $subcategory->image));
+            if ($subcategory->image && file_exists(public_path('images/subcategory/' . $subcategory->image))) {
+                unlink(public_path('images/subcategory/' . $subcategory->image));
+            }
+
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/subcategory'), $imageName);
+
+            $data['image'] = $imageName;
+        }
+
+        $subcategory->update($data);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'SubCategory updated successfully!'
+        ]);
     }
 
-    // ৩. ডাটাবেজ থেকে রেকর্ডটি ডিলিট করুন
-    $subcategory->delete();
+    // ================= DELETE =================
+    public function destroy($id)
+    {
+        $subcategory = SubCategory::findOrFail($id);
 
-    return response()->json(['success' => 'SubCategory and image deleted successfully!']);
-}
+        if ($subcategory->image && file_exists(public_path('images/subcategory/' . $subcategory->image))) {
+            unlink(public_path('images/subcategory/' . $subcategory->image));
+        }
 
+        $subcategory->delete();
 
-
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'SubCategory deleted successfully!'
+        ]);
+    }
 }

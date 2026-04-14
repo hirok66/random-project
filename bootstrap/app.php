@@ -14,10 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
 
     $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
-            'moderator' => \App\Http\Middleware\ModeratorMiddleware::class,
-           'user' => \App\Http\Middleware\UserMiddleware::class,
-            'last_seen' => \App\Http\Middleware\UserLastSeenMiddleware::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        'moderator' => \App\Http\Middleware\ModeratorMiddleware::class,
+        'user' => \App\Http\Middleware\UserMiddleware::class,
+        
+
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

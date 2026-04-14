@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Zenis- Multipurpose eCommerce HTML Template</title>
     <link rel="icon" type="image/png" href="{{asset('asset')}}/images/favicon.png">
     <link rel="stylesheet" href="{{asset('asset')}}/css/all.min.css">
@@ -22,7 +23,10 @@
     <link rel="stylesheet" href="{{asset('asset')}}/css/custom_spacing.css">
     <link rel="stylesheet" href="{{asset('asset')}}/css/style.css">
     <link rel="stylesheet" href="{{asset('asset')}}/css/responsive.css">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
 </head>
+
+
 
 <body class="default_home">
 
@@ -46,12 +50,14 @@
                 <div class="col-xxl-6 col-xl-5 col-lg-5 d-none d-lg-block">
                     <form action="#">
                         <select class="select_2">
-                            <option>All Categories</option>
-                            <option>Fashion</option>
-                            <option>Elentronics</option>
-                            <option>Fashion & Beauty</option>
-                            <option>Jewelry</option>
-                            <option>Grocery</option>
+                                 <option>All Categories</option>
+                 <?php
+                      $categories = \App\Models\Category::where('status', 'active')->get();
+                         foreach ($categories as $category) {
+                         echo "<option>{$category->name}</option>";
+                                                 }
+                            ?>
+
                         </select>
                         <div class="input">
                             <input type="text" placeholder="Search your product...">
@@ -130,7 +136,7 @@
                             <li>
                                 <a href="#">shop <i class="fas fa-chevron-down"></i></a>
                                 <ul class="menu_droapdown">
-                                    <li><a href="shop.html">Shop</a></li>
+                                    <li><a href="{{ route('shop.page') }}">Shop</a></li>
                                     <li><a href="shop_details.html">Shop Details</a></li>
                                 </ul>
                             </li>
@@ -208,7 +214,18 @@
                             <!-- Show this when logged in -->
                             <a class="user" href="{{ route('welcome') }}">
                                 <b>
-                                    <img src="{{asset('asset')}}/images/user_icon_black.svg" alt="user" class="img-fluid">
+                                    @php
+                                  $user = Auth::guard('gest')->user();
+                                    @endphp
+
+                                    @if($user->image)
+
+                                             <img src="{{ asset('images/grst/'.$user->image) }}" alt="signup" class="img-fluid" class="users_image w-100">
+                                    @else
+                                        {{-- সরাসরি Avatar ক্লাস ব্যবহার করুন --}}
+                                        <img src="{{asset('asset')}}/images/user_icon_black.svg" alt="signup" class="img-fluid">
+                                    @endif
+
                                 </b>
                                 <h5>{{ Auth::guard('gest')->user()->first_name }}</h5>
                             </a>
@@ -226,7 +243,7 @@
                                 @if (Auth::guard('gest')->check())
                                    <ul class="user_dropdown">
                                     <li>
-                                        <a href="dashboard.html">
+                                        <a href="{{ route('gest.dashboard') }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -236,7 +253,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="dashboard_profile.html">
+                                        <a href="{{ route('gest.dashboard') }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -246,7 +263,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="dashboard_order.html">
+                                        <a href="{{ route('dashboard.order.page') }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -256,7 +273,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="dashboard_wishlist.html">
+                                        <a href="{{ route('dashboard.wishlist') }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -450,83 +467,83 @@
                                 <li class="mobile_dropdown">
                                     <a href="#">Men's Fashion</a>
                                     <ul class="inner_menu">
-                                        <li><a href="shop.html">jeans pant</a></li>
-                                        <li><a href="shop.html">formal shirt</a></li>
-                                        <li><a href="shop.html">2 quater</a></li>
-                                        <li><a href="shop.html">denim jacket</a></li>
-                                        <li><a href="shop.html">t-shirt</a></li>
-                                        <li><a href="shop.html">polo-shirt</a></li>
-                                        <li><a href="shop.html">formal pant</a></li>
+                                        <li><a href="{{ route('shop.page') }}">jeans pant</a></li>
+                                        <li><a href="{{ route('shop.page') }}">formal shirt</a></li>
+                                        <li><a href="{{ route('shop.page') }}">2 quater</a></li>
+                                        <li><a href="{{ route('shop.page') }}">denim jacket</a></li>
+                                        <li><a href="{{ route('shop.page') }}">t-shirt</a></li>
+                                        <li><a href="{{ route('shop.page') }}">polo-shirt</a></li>
+                                        <li><a href="{{ route('shop.page') }}">formal pant</a></li>
                                     </ul>
                                 </li>
                                 <li class="mobile_dropdown">
                                     <a href="#">women's Fashion</a>
                                     <ul class="inner_menu">
-                                        <li><a href="shop.html">sharee</a></li>
-                                        <li><a href="shop.html">kurti</a></li>
-                                        <li><a href="shop.html">plazoo</a></li>
-                                        <li><a href="shop.html">lagins</a></li>
-                                        <li><a href="shop.html">tops</a></li>
-                                        <li><a href="shop.html">scart</a></li>
-                                        <li><a href="shop.html">denim jeans</a></li>
-                                        <li><a href="shop.html">Gown</a></li>
+                                        <li><a href="{{ route('shop.page') }}">sharee</a></li>
+                                        <li><a href="{{ route('shop.page') }}">kurti</a></li>
+                                        <li><a href="{{ route('shop.page') }}">plazoo</a></li>
+                                        <li><a href="{{ route('shop.page') }}">lagins</a></li>
+                                        <li><a href="{{ route('shop.page') }}">tops</a></li>
+                                        <li><a href="{{ route('shop.page') }}">scart</a></li>
+                                        <li><a href="{{ route('shop.page') }}">denim jeans</a></li>
+                                        <li><a href="{{ route('shop.page') }}">Gown</a></li>
                                     </ul>
                                 </li>
                                 <li class="mobile_dropdown">
                                     <a href="#">kids fashion</a>
                                     <ul class="inner_menu">
-                                        <li><a href="shop.html">t-shirt</a></li>
-                                        <li><a href="shop.html">partu dress</a></li>
-                                        <li><a href="shop.html">sharee</a></li>
-                                        <li><a href="shop.html">kurti</a></li>
+                                        <li><a href="{{ route('shop.page') }}">t-shirt</a></li>
+                                        <li><a href="{{ route('shop.page') }}">partu dress</a></li>
+                                        <li><a href="{{ route('shop.page') }}">sharee</a></li>
+                                        <li><a href="{{ route('shop.page') }}">kurti</a></li>
                                     </ul>
                                 </li>
                                 <li class="mobile_dropdown">
                                     <a href="#">western wear</a>
                                     <ul class="inner_menu">
-                                        <li><a href="shop.html">western party dress</a></li>
-                                        <li><a href="shop.html">kurti</a></li>
-                                        <li><a href="shop.html">denim pant</a></li>
-                                        <li><a href="shop.html">casual jacket</a></li>
+                                        <li><a href="{{ route('shop.page') }}">western party dress</a></li>
+                                        <li><a href="{{ route('shop.page') }}">kurti</a></li>
+                                        <li><a href="{{ route('shop.page') }}">denim pant</a></li>
+                                        <li><a href="{{ route('shop.page') }}">casual jacket</a></li>
                                     </ul>
                                 </li>
                                 <li class="mobile_dropdown">
                                     <a href="#">Denim collection</a>
                                     <ul class="inner_menu">
-                                        <li><a href="shop.html">shirt</a></li>
-                                        <li><a href="shop.html">pant</a></li>
-                                        <li><a href="shop.html">jacket</a></li>
-                                        <li><a href="shop.html">blazer</a></li>
+                                        <li><a href="{{ route('shop.page') }}">shirt</a></li>
+                                        <li><a href="{{ route('shop.page') }}">pant</a></li>
+                                        <li><a href="{{ route('shop.page') }}">jacket</a></li>
+                                        <li><a href="{{ route('shop.page') }}">blazer</a></li>
                                     </ul>
                                 </li>
                                 <li class="mobile_dropdown">
                                     <a href="#">sport wear</a>
                                     <ul class="inner_menu">
-                                        <li><a href="shop.html">shoes</a></li>
-                                        <li><a href="shop.html">trouser</a></li>
-                                        <li><a href="shop.html">meat</a></li>
-                                        <li><a href="shop.html">Outdoors</a></li>
-                                        <li><a href="shop.html">Sports Pant</a></li>
+                                        <li><a href="{{ route('shop.page') }}">shoes</a></li>
+                                        <li><a href="{{ route('shop.page') }}">trouser</a></li>
+                                        <li><a href="{{ route('shop.page') }}">meat</a></li>
+                                        <li><a href="{{ route('shop.page') }}">Outdoors</a></li>
+                                        <li><a href="{{ route('shop.page') }}">Sports Pant</a></li>
                                     </ul>
                                 </li>
                                 <li class="mobile_dropdown">
                                     <a href="#">beauty products</a>
                                     <ul class="inner_menu">
-                                        <li><a href="shop.html">Concealer Palette</a></li>
-                                        <li><a href="shop.html">Highlighter Palette</a></li>
-                                        <li><a href="shop.html">SkinPure Avocado Gel</a></li>
-                                        <li><a href="shop.html">Blush Palette</a></li>
-                                        <li><a href="shop.html">Face Wash</a></li>
-                                        <li><a href="shop.html">Lip Balm</a></li>
+                                        <li><a href="{{ route('shop.page') }}">Concealer Palette</a></li>
+                                        <li><a href="{{ route('shop.page') }}">Highlighter Palette</a></li>
+                                        <li><a href="{{ route('shop.page') }}">SkinPure Avocado Gel</a></li>
+                                        <li><a href="{{ route('shop.page') }}">Blush Palette</a></li>
+                                        <li><a href="{{ route('shop.page') }}">Face Wash</a></li>
+                                        <li><a href="{{ route('shop.page') }}">Lip Balm</a></li>
                                     </ul>
                                 </li>
                                 <li class="mobile_dropdown">
                                     <a href="#">fashion jewellery</a>
                                     <ul class="inner_menu">
-                                        <li><a href="shop.html">Necklace</a></li>
-                                        <li><a href="shop.html">ear ring</a></li>
-                                        <li><a href="shop.html">fingure ring</a></li>
-                                        <li><a href="shop.html">bratchlet</a></li>
+                                        <li><a href="{{ route('shop.page') }}">Necklace</a></li>
+                                        <li><a href="{{ route('shop.page') }}">ear ring</a></li>
+                                        <li><a href="{{ route('shop.page') }}">fingure ring</a></li>
+                                        <li><a href="{{ route('shop.page') }}">bratchlet</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -613,7 +630,7 @@
             <div class="row justify-content-between">
                 <div class="col-xl-3 col-md-6 col-lg-3 wow fadeInUp" data-wow-delay=".7s">
                     <div class="footer_2_logo_area">
-                        <a class="footer_logo" href="index.html">
+                        <a class="footer_logo" href="{{ route('welcome') }}">
                             <img src="{{asset('asset')}}/images/footer_logo_2.png" alt="Zenis" class="img-fluid w-100">
                         </a>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, distinctio molestiae error
@@ -723,7 +740,20 @@
         SCROLL BUTTON END
     ===========================-->
 
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- summer note --}}
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 
+
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    });
+</script>
     <!--jquery library js-->
     <script src="{{asset('asset')}}/js/jquery-3.7.1.min.js"></script>
     <!--bootstrap js-->
@@ -763,6 +793,7 @@
     <script src="{{asset('asset')}}/js/animated_barfiller.js"></script>
     <!--main/custom js-->
     <script src="{{asset('asset')}}/js/custom.js"></script>
+ @yield('footer')
 
 </body>
 

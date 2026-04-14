@@ -1,8 +1,15 @@
 <?php
 
+use App\Http\Controllers\Admin\Shop\ShopController;
+use App\Http\Controllers\AdminSearchController;
 use App\Http\Controllers\category\AllCategoryController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FrontedFlash_dealsController;
+use App\Http\Controllers\FrontedShopController;
+use App\Http\Controllers\FrontedShopdetailsController;
 use App\Http\Controllers\FrontendLoginController;
+use App\Http\Controllers\GestProfileController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PasswordRestContrller;
 use App\Http\Controllers\ProfileController;
@@ -16,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/admin/serch/', [AdminSearchController::class , 'search'])->name('admin.search');
 Route::get('/dashboard', function () { return view('user.dashboard');})->middleware(['auth', 'verified','user'])->name('user.dashboard');
 
 Route::get('/moderator/dashboard', function () { return view('moderator.dashboard');})->middleware(['auth', 'verified','moderator'])->name('moderator.dashboard');
@@ -43,28 +50,29 @@ Route::get('/admin/dashboard', [UserController::class, 'index'])->name('admin.da
     Route::get('/admin/user/fetch', [UserController::class, 'fetch'])->name('user.fetch');
 
 
-    // category
+// ==================== Admin Category Routes ====================
+ Route::get('/admin/categories/index', [CategoryController::class, 'index'])->name('admin.category.index');
+ Route::post('/admin/categories/store', [CategoryController::class, 'store'])->name('admin.category.store');
+ Route::get('/admin/categories/fetch', [CategoryController::class, 'fetch'])->name('admin.category.fetch');
+ Route::post('/admin/categories/status/{id}', [CategoryController::class, 'status'])->name('admin.categories.status');
+ Route::post('/admin/categories/update/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
 
-    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('category.index');
-    Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('category.create');
-    Route::post('/admin/categories/store', [CategoryController::class, 'store'])->name('store.category');
-    Route::get('/admin/categories/status', [CategoryController::class, 'status'])->name('category.status');
-    Route::get('/admin/categories/fetch', [CategoryController::class, 'fetch'])->name('category.fetch');
-    Route::post('/admin/categories/edit', [CategoryController::class, 'edit'])->name('category.updateStatus');
+Route::prefix('admin/subcategory')->group(function () {
 
-    Route::post('/admin/categories/update', [CategoryController::class, 'update'])->name('category.update');
-    Route::delete('/admin/category/delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::get('/index', [SubCategoryController::class, 'index'])->name('admin.subcategory.index');
 
+    Route::post('/store', [SubCategoryController::class, 'store'])->name('admin.subcategory.store');
 
-    // SubCategoryController
-    Route::get('/admin/subcategories', [SubCategoryController::class, 'index'])->name('SubCategoryController.index');
-    Route::get('/admin/subcategories/create', [SubCategoryController::class, 'create'])->name('SubCategoryController.create');
-    Route::post('/admin/subcategories/store', [SubCategoryController::class, 'store'])->name('store.SubCategoryController');
-    Route::get('/admin/subcategories/status', [SubCategoryController::class, 'status'])->name('SubCategoryController.status');
-    Route::get('/admin/subcategories/fetch', [SubCategoryController::class, 'fetch'])->name('SubCategoryController.fetch');
-    Route::post('/admin/subcategories/edit', [SubCategoryController::class, 'edit'])->name('SubCategoryController.updateStatus');
-    Route::post('/admin/subcategories/update', [SubCategoryController::class, 'update'])->name('SubCategoryController.update');
-    Route::delete('/admin/subcategories/delete/{id}', [SubCategoryController::class, 'delete'])->name('SubCategoryController.delete');
+    Route::get('/admin/subcategories/fetch', [SubCategoryController::class, 'fetch'])
+    ->name('admin.subcategory.fetch');
+
+    Route::post('/status', [SubCategoryController::class, 'status'])->name('admin.subcategory.status');
+
+    Route::post('/update/{id}', [SubCategoryController::class, 'update'])->name('admin.subcategory.update');
+
+    Route::delete('/delete/{id}', [SubCategoryController::class, 'destroy'])->name('admin.subcategory.delete');
+
+});
 
 
     // tages
@@ -80,6 +88,16 @@ Route::get('/admin/dashboard', [UserController::class, 'index'])->name('admin.da
     Route::delete('/admin/tages/delete/{id}', [TagController::class, 'delete'])->name('admin.tag.delete');
 
 
+
+    // shops
+    Route::get('/admin/shops', [ShopController::class, 'index'])->name('admin.shops');
+    Route::get('/admin/shops/create', [ShopController::class, 'create'])->name('admin.shops.create');
+    Route::post('/admin/shops/store', [ShopController::class, 'store'])->name('admin.shops.store');
+    Route::get('/admin/shops/status', [ShopController::class, 'status'])->name('admin.shops.status');
+    Route::get('/admin/shops/fetch', [ShopController::class, 'fetch'])->name('admin.shops.fetch');
+     Route::post('/admin/shops/update', [ShopController::class, 'update'])->name('admin.shops.update');
+    Route::post('/admin/shops/edit', [ShopController::class, 'edit'])->name('admin.shops.updateStatus');
+Route::delete('/admin/shops/delete/{id}', [ShopController::class, 'delete'])->name('admin.shops.delete');
 
 });
 
@@ -98,6 +116,45 @@ Route::post('/user/logout', [FrontendLoginController::class, 'logout'])->name('g
 
 // fronted AllCategory Contrller
 Route::get('/all/Category', [AllCategoryController::class, 'allCategory'])->name('all.categoy');
+
+//shops
+Route::get('/shop/index', [FrontedShopController::class, 'index'])->name('shop.page');
+
+// shop.details
+Route::get('/shop/details', [FrontedShopdetailsController::class, 'index'])->name('shop.details');
+
+
+// FrontedFlash_deals
+Route::get('/flash/deals/index', [FrontedFlash_dealsController::class, 'index'])->name('flash.deals.page');
+// 'auth:gest' লিখে লারাভেলকে বলে দিতে হয় কোন গার্ড চেক করবে
+Route::get('/gest/dashboard', [GestProfileController::class, 'dashboard']) ->name('gest.dashboard');
+Route::get('/dashboard/order/page', [GestProfileController::class, 'dashbashboard_order']) ->name('dashboard.order.page');
+Route::get('/dashboard/download', [GestProfileController::class, 'dashboard_download']) ->name('dashboard.download');
+Route::get('/dashboard/returns/request', [GestProfileController::class, 'returns_request']) ->name('dashboard.returns.request');
+Route::get('/dashboard/profiel/information', [GestProfileController::class, 'profiel_information']) ->name('profiel.information');
+Route::get('/dashboard/profiel/edit', [GestProfileController::class, 'dashboard_profile_edit']) ->name('dashboard.profile.edit');
+
+// address
+Route::get('/dashboard/address', [GestProfileController::class, 'dashboard_address']) ->name('dashboard.address');
+Route::get('/dashboard/address/add', [GestProfileController::class, 'address_add']) ->name('address.add');
+Route::post('/dashboard/address/store', [GestProfileController::class, 'address_store']) ->name('address.store');
+
+
+Route::get('/dashboard/wishlist', [GestProfileController::class, 'dashboard_wishlist']) ->name('dashboard.wishlist');
+Route::get('/dashboard/reviews', [GestProfileController::class, 'dashboard_reviews']) ->name('dashboard.reviews');
+Route::get('/dashboard/change/password', [GestProfileController::class, 'change_password']) ->name('dashboard.change.password');
+Route::post('/dashboard/password/update', [GestProfileController::class, 'password_update']) ->name('gest.password.update');
+Route::post('/dashboard/image/update', [GestProfileController::class, 'image']) ->name('dashboard.image');
+
+
+//
+
+Route::get('/divisions', [LocationController::class, 'getDivisions']);
+Route::get('/districts/{id}', [LocationController::class, 'getDistricts']);
+Route::get('/upazilas/{id}', [LocationController::class, 'getUpazilas']);
+Route::get('/unions/{id}', [LocationController::class, 'getUnions']);
+Route::get('/villages/{id}', [LocationController::class, 'getVillages']);
+
 
 
 

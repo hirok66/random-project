@@ -3,165 +3,124 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Intervention\Image\Laravel\Facades\Image;
-use Illuminate\Support\Facades\File;
-
+use Illuminate\Http\Request; // Use this instead of the Facade for type-hinting
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    /**
-     * Show the Admin Dashboard with categorys
-     */
-   public function index()
+    public function index()
     {
-        // Fetch categorys ordered by last_seen descending, 10 per page
-        $categorys = Category::orderBy('id', 'desc')->paginate(10);
-
-        // Pass categorys to admin.dashboard view
-        return view('admin.categorys.index', [
-            'categorys' => $categorys
-        ]);
+        $categories = Category::orderBy('created_at', 'desc')->latest()->paginate(5);
+        return view('admin.category.index', compact('categories'));
     }
 
-    // create category form
-    public function create()
+    public function store(Request $request)
     {
-        $categorys = Category::orderBy('id', 'desc')->paginate(10);
-        return view('admin.categorys.index',
-        [
-            'categorys'=>$categorys,
+        // 1. Validation
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-    }
-    // store category
-   public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-    ]);
 
-
-
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $filename = time() . '.webp';
-   $file->move(public_path('uploads'), $filename);
-    }
-
-
-        Category::create([
-            'name'   => $request->name,
-            'image'  => $filename,
-            'status' => 'active',
-        ]);
-        return response()->json(['message' => 'Category created successfully']);
-
-
-}
-
-
-
-    // updateStatus
-    public function updateStatus(Request $request)
-    {
-
-
-        $category = Category::findOrFail($request->id);
-        $category->status = $request->status;
-        $category->save();
-
-        return response()->json(['success' => true]);
-
-    }
-
-// fetch
-public function fetch(Request $request) {
-    $search = $request->search;
-
-    $categorys = Category::when($search, function($query) use ($search) {
-        $query->where('name', 'LIKE', "%{$search}%")
-              ->orWhere('status', 'LIKE', "%{$search}%");
-    })
-    ->orderBy('id', 'desc')
-    ->paginate(10);
-
-    return response()->json([
-        'table' => view('admin.categorys.table', compact('categorys'))->render(),
-        'pagination' => $categorys->links()->toHtml()
-    ]);
-}
-
-// update
-
-
-public function update(Request $request)
-{
-    $request->validate([
-        'id' => 'required|exists:categories,id',
-        'name' => 'required|string|max:255',
-        'status' => 'required',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048' // ভ্যালিডেশন যোগ করা ভালো
-    ]);
-
-    $category = Category::find($request->id);
-    $filename = $category->image; // ডিফল্ট হিসেবে আগের নাম রাখা হলো
-
-    if ($request->hasFile('image')) {
-        // ১. পুরানো ইমেজটি ফোল্ডার থেকে ডিলিট করা (যদি থাকে)
-        if ($category->image && File::exists(public_path('uploads/' . $category->image))) {
-            File::delete(public_path('uploads/' . $category->image));
+        // 2. Image Handling
+        $imageName = null;
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/categories'), $imageName);
         }
 
-if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $filename = time() . '.webp';
-   $file->move(public_path('uploads'), $filename);
-    }
-    // ৩. ডাটাবেজ আপডেট
-
-        $category->update([
+        // 3. Database Insertion
+        Category::create([
             'name' => $request->name,
-            'status' => $request->status,
-            'image' => $filename, // নতুন ইমেজের নাম আপডেট করা
+            'description' => $request->description,
+            'image' => $imageName,
+            'status' => 'active',
+            'order' => 0,
+            'parent_id' => 0,
+            'slug' => Str::slug($request->name),
         ]);
+
+        // 4. AJAX Response (Crucial Change)
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category created successfully.'
+        ], 200);
     }
 
-    return response()->json(['success' => 'Category updated successfully!']);
-}
 
-
-// status update
-public function status(Request $request)
-    {
-        $category = Category::findOrFail($request->id);
-        $category->status = $request->status;
-        $category->save();
-
-    }
-
-// delete
-
-
-
-public function delete($id)
+    // Fetch Categories for AJAX
+ public function fetch(Request $request)
 {
-    // ১. প্রথমে আইডি দিয়ে ক্যাটাগরি খুঁজে বের করুন
+    $query = $request->get('query');
+
+    $categories = Category::query();
+
+    if($query != ''){
+        $categories->where('name', 'LIKE', "%{$query}%")
+                   ->orWhere('description', 'LIKE', "%{$query}%");
+    }
+
+    $categories = $categories->latest()->paginate(5); // 👈 pagination
+
+    $table = view('admin.category.table', compact('categories'))->render();
+
+    return response()->json([
+        'table' => $table,
+        'pagination' => $categories->links()->toHtml() // 👈 MUST
+    ]);
+}
+    // Update Category Status
+    public function status(Request $request)
+    {
+        $user = Category::findOrFail($request->id);
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+// update
+   public function update(Request $request, $id)
+{
     $category = Category::findOrFail($id);
 
-    // ২. ফোল্ডার থেকে ইমেজটি ডিলিট করুন (যদি থাকে)
-    if ($category->image && File::exists(public_path('uploads/' . $category->image))) {
-        File::delete(public_path('uploads/' . $category->image));
+    $request->validate([
+        'name'        => 'required|string|max:255',
+        'description' => 'required|string',
+        'order'       => 'required|string|max:255',
+        'status'      => 'required|string',
+        'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    // ডাটা গুছিয়ে নেওয়া
+    $data = [
+        'name'        => $request->name,
+        'description' => $request->description,
+        'status'      => $request->status,
+        'order'       => $request->order,
+    ];
+
+    // ইমেজ চেক করা
+    if ($request->hasFile('image')) {
+        // পুরনো ইমেজ ডিলিট করা
+        if ($category->image && file_exists(public_path('images/categories/' . $category->image))) {
+            unlink(public_path('images/categories/' . $category->image));
+        }
+
+        // নতুন ইমেজ সেভ করা
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images/categories'), $imageName);
+
+        // আপডেটের জন্য ইমেজের নাম ডাটা অ্যারেতে রাখা
+        $data['image'] = $imageName;
     }
 
-    // ৩. ডাটাবেজ থেকে রেকর্ডটি ডিলিট করুন
-    $category->delete();
+    // একবারেই আপডেট করা
+    $category->update($data);
 
-    return response()->json(['success' => 'Category and image deleted successfully!']);
+    return response()->json(['message' => 'Category updated successfully!']);
 }
 
-
-
 }
-
 

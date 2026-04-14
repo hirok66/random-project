@@ -10,38 +10,29 @@
             <div class="row">
                 <div class="col-xl-2  d-none d-xxl-block">
                     <ul class="menu_cat_item">
+@foreach ($categorys as $category)
+    <li>
+        <a href="{{ route('shop.page') }}">
+            <span>
+                <img src="{{ asset('images/categories/' . $category->image) }}" alt="category">
+            </span>
+            {{ $category->name }}
+        </a>
 
-                            @foreach ( $categories as $category )
+      @if($category->subcategories && $category->subcategories->count() > 0)
+            <ul class="menu_cat_droapdown">
+                @foreach ($category->subcategories as $subcat)
+                    <li>
+                        <a href="{{ route('shop.page') }}">{{ $subcat->name }} <i class="fal fa-angle-right"></i></a>
+                        <!-- If you have a third level (child categories), loop here -->
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+    </li>
+@endforeach
 
 
-                        <li>
-                            <a href="shop.html">
-                                <span>
-                                    <img src="{{ asset('uploads/' . $category->image) }}" alt="category">
-                                </span>
-                               {{$category->name}}
-                            </a>
-                            <ul class="menu_cat_droapdown">
-                                <li><a href="shop.html">shirts <i class="fal fa-angle-right"></i></a>
-                                    <ul class="sub_category">
-                                        <li><a href="shop.html">Casual Shirts</a> </li>
-                                        <li><a href="shop.html">Formal Shirts</a></li>
-                                        <li><a href="shop.html">Denim Shirts</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="shop.html">pant <i class="fal fa-angle-right"></i></a>
-                                    <ul class="sub_category">
-                                        <li><a href="shop.html">Casual Pants</a></li>
-                                        <li><a href="shop.html">Formal Trousers</a> </li>
-                                        <li><a href="shop.html">Jeans & Denim</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="shop.html">Casual Wear</a></li>
-                                <li><a href="shop.html">Formal Attire</a></li>
-                            </ul>
-                        </li>
-
-                    @endforeach
 
 
 
@@ -185,7 +176,7 @@
                     <div class="d-flex flex-wrap justify-content-end">
                         <div class="simply-countdown simply-countdown-one"></div>
                         <div class="view_all_btn_area">
-                            <a class="view_all_btn" href="flash_deals.html">View all</a>
+                            <a class="view_all_btn" href="{{ url('/flash/deals/index')}}">View all</a>
                         </div>
                     </div>
                 </div>
@@ -474,6 +465,7 @@
     <section class="category category_2 mt_55">
         <div class="container">
             <div class="row category_2_slider">
+
                 <div class="col-2 wow fadeInUp">
                     <a href="shop.html" class="category_item">
                         <div class="img">
@@ -482,6 +474,7 @@
                         <h3> Men's Fashion</h3>
                     </a>
                 </div>
+
                 <div class="col-2 wow fadeInUp">
                     <a href="shop.html" class="category_item">
                         <div class="img">
@@ -554,6 +547,8 @@
                         <h3>kids fashion</h3>
                     </a>
                 </div>
+
+
             </div>
         </div>
     </section>

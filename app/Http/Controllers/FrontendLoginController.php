@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Shop;
+use App\Models\SubCategory;
+
 class FrontendLoginController extends Controller
 {
 
@@ -15,9 +18,13 @@ public function welcome()
 {
 
 
-$categories = Category::where('status', 'active')->latest()->paginate(10);
+$categorys = Category::where('status', 'active')->latest()->paginate(10);
+$shops = Shop::where('status', 'active')->latest()->paginate(10);
+$subCategory = SubCategory::where('status', 'active')->latest()->paginate(10);
     return view('welcome',[
-        'categories'=>$categories,
+        'categorys'=>$categorys,
+        'shops'=>$shops,
+        'subCategories'=>$subCategory,
     ]);
 }
 
