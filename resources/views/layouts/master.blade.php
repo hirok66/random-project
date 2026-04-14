@@ -137,7 +137,7 @@
                                 <a href="#">shop <i class="fas fa-chevron-down"></i></a>
                                 <ul class="menu_droapdown">
                                     <li><a href="{{ route('shop.page') }}">Shop</a></li>
-                                    <li><a href="shop_details.html">Shop Details</a></li>
+                                    <li><a href="{{route('shop.details')}}">Shop Details</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -314,11 +314,11 @@
             <div class="offcanvas-body">
                 <ul>
                     <li>
-                        <a href="shop_details.html" class="cart_img">
+                        <a href="{{route('shop.details')}}" class="cart_img">
                             <img src="{{asset('asset')}}/images/product_1.png" alt="product" class="img-fluid w-100">
                         </a>
                         <div class="cart_text">
-                            <a class="cart_title" href="shop_details.html">Men's Fashionable Hoodie</a>
+                            <a class="cart_title" href="{{route('shop.details')}}">Men's Fashionable Hoodie</a>
                             <p>$140 <del>$150</del></p>
                             <span><b>Color:</b> Red</span>
                             <span><b>Size:</b> XL (Extra Large)</span>
@@ -326,11 +326,11 @@
                         <a class="del_icon" href="#"><i class="fal fa-times"></i></a>
                     </li>
                     <li>
-                        <a href="#shop_details.html" class="cart_img">
+                        <a href="#{{route('shop.details')}}" class="cart_img">
                             <img src="{{asset('asset')}}/images/product_2.png" alt="product" class="img-fluid w-100">
                         </a>
                         <div class="cart_text">
-                            <a class="cart_title" href="shop_details.html">Kids cotton Combo Set</a>
+                            <a class="cart_title" href="{{route('shop.details')}}">Kids cotton Combo Set</a>
                             <p>$130 <del>$160</del></p>
                             <span><b>Color:</b> Orange</span>
                             <span><b>Size:</b> M (Medium)</span>
@@ -338,11 +338,11 @@
                         <a class="del_icon" href="#"><i class="fal fa-times"></i></a>
                     </li>
                     <li>
-                        <a href="shop_details.html" class="cart_img">
+                        <a href="{{route('shop.details')}}" class="cart_img">
                             <img src="{{asset('asset')}}/images/product_3.png" alt="product" class="img-fluid w-100">
                         </a>
                         <div class="cart_text">
-                            <a class="cart_title" href="shop_details.html">Women's Western Party Dress</a>
+                            <a class="cart_title" href="{{route('shop.details')}}">Women's Western Party Dress</a>
                             <p>$90 <del>$100</del></p>
                             <span><b>Color:</b> Purple</span>
                             <span><b>Size:</b> S (Small)</span>
@@ -350,11 +350,11 @@
                         <a class="del_icon" href="#"><i class="fal fa-times"></i></a>
                     </li>
                     <li>
-                        <a href="shop_details.html" class="cart_img">
+                        <a href="{{route('shop.details')}}" class="cart_img">
                             <img src="{{asset('asset')}}/images/product_4.png" alt="product" class="img-fluid w-100">
                         </a>
                         <div class="cart_text">
-                            <a class="cart_title" href="shop_details.html">Men's trendy formal shoes</a>
+                            <a class="cart_title" href="{{route('shop.details')}}">Men's trendy formal shoes</a>
                             <p>$140</p>
                             <span><b>Color:</b> Blue</span>
                             <span><b>Size:</b> XL (Extra Large)</span>
@@ -362,11 +362,11 @@
                         <a class="del_icon" href="#"><i class="fal fa-times"></i></a>
                     </li>
                     <li>
-                        <a href="shop_details.html" class="cart_img">
+                        <a href="{{route('shop.details')}}" class="cart_img">
                             <img src="{{asset('asset')}}/images/product_5.png" alt="product" class="img-fluid w-100">
                         </a>
                         <div class="cart_text">
-                            <a class="cart_title" href="shop_details.html">Kid's Western Party Dress</a>
+                            <a class="cart_title" href="{{route('shop.details')}}">Kid's Western Party Dress</a>
                             <p>$99.00</p>
                             <span><b>Color:</b> Black</span>
                             <span><b>Size:</b> L (Large)</span>
@@ -552,7 +552,7 @@
                             aria-labelledby="pills-profile-tab" tabindex="0">
                             <ul class="main_mobile_menu">
                                 <li class="mobile_dropdown">
-                                    <a href="#">home</a>
+                                    <a href="{{ route('welcome') }}">home</a>
                                     <ul class="inner_menu">
                                         <li><a href="index.html">clothing fashion 01</a></li>
                                         <li><a href="home_fashion_2.html">clothing fashion 02</a></li>
@@ -561,7 +561,7 @@
                                     </ul>
                                 </li>
                                 <li class="mobile_dropdown">
-                                    <a href="#">shop</a>
+                                    <a href="{{ route('shop.page') }}">shop</a>
                                     <ul class="inner_menu">
                                         <li><a href="#">store</a></li>
                                         <li><a href="#">store details</a></li>
@@ -659,13 +659,15 @@
                 <div class="col-xl-2 col-sm-6 col-md-4 col-lg-2 wow fadeInUp" data-wow-delay="1.3s">
                     <div class="footer_link">
                         <h3>Category</h3>
-                        <ul>
-                            <li><a href="#">Men’s Fashion</a></li>
-                            <li><a href="#">denim Collection</a></li>
-                            <li><a href="#">western wear</a></li>
-                            <li><a href="#">sport wear</a></li>
-                            <li><a href="#">fashion jewellery</a></li>
-                        </ul>
+                      <ul>
+    @foreach ($categories->take(5) as $category)
+        <li>
+            <a href="{{ route('all.categoy') }}">
+                {{ $category->name }}
+            </a>
+        </li>
+    @endforeach
+</ul>
                     </div>
                 </div>
                 <div class="col-xl-2 col-sm-6 col-md-4 col-lg-2 wow fadeInUp" data-wow-delay="1.6s">

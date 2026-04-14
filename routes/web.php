@@ -14,6 +14,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PasswordRestContrller;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\Tag;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
@@ -156,6 +157,8 @@ Route::get('/unions/{id}', [LocationController::class, 'getUnions']);
 Route::get('/villages/{id}', [LocationController::class, 'getVillages']);
 
 
+// subscriber
+Route::post('/usre/Subscriber', [SubscriberController::class, 'subscriber']) ->name('gest.subscriber');
 
 
 require __DIR__.'/auth.php';
