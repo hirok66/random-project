@@ -88,7 +88,7 @@
                                 <div class="mb-3">
                                     <label for="userEmail" class="form-label">Email address <span class="text-danger">*</span></label>
                                     <div class="app-search">
-                                        <input type="email" class="form-control" name="email" id="userEmail" placeholder="you@example.com" >
+                                        <input type="email" class="form-control" value="admin@example.com" name="email" id="userEmail" placeholder="you@example.com" >
                                         <i data-lucide="circle-user" class="app-search-icon text-muted"></i>
                                         @error('email')
                                         <span class="text-danger">{{ $message }}</span>
@@ -100,7 +100,7 @@
                                 <div class="mb-3">
                                     <label for="userPassword" class="form-label">Password <span class="text-danger">*</span></label>
                                     <div class="app-search">
-                                        <input  name="password"type="password" class="form-control" id="userPassword" placeholder="••••••••" >
+                                        <input  name="password"type="password" class="form-control" value="password" id="userPassword" placeholder="••••••••" >
                                         <i data-lucide="key-round" class="app-search-icon text-muted"></i>
                                         @error('email')
                                             <span class="text-danger">{{ $message }}</span>

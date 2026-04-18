@@ -151,25 +151,10 @@
                             <li><a href="flash_deals.html">Flash Deals</a></li>
                             <li><a href="#">pages <i class="fas fa-chevron-down"></i></a>
                                 <ul class="menu_droapdown">
-                                    <li><a href="about_us.html">about us</a></li>
-                                    <li><a href="category.html">Category</a></li>
-                                    <li><a href="brand.html">Brand</a></li>
-                                    <li><a href="cart.html">cart view</a></li>
-                                    <li><a href="wishlist.html">wishlist</a></li>
-                                    <li><a href="compare.html">compare</a></li>
-                                    <li><a href="checkout.html">checkout</a></li>
-                                    <li><a href="payment_success.html">payment success</a></li>
-                                    <li><a href="payment_cancel.html">payment Cancel</a></li>
-                                    <li><a href="track_order.html">track order</a></li>
-                                    <li><a href="error.html">error/404</a></li>
-                                    <li><a href="faq.html">FAQ's</a></li>
-                                    <li><a href="privacy_policy.html">privacy Policy</a></li>
-                                    <li><a href="terms_condition.html">terms and condition</a></li>
-                                    <li><a href="return_policy.html">return policy</a></li>
-                                    <li><a href="sign_in.html">sign in</a></li>
-                                    <li><a href="sign_up.html">sign up</a></li>
-                                    <li><a href="forgot_password.html">forgot password</a></li>
-                                    <li><a href="dashboard.html">Dashboard</a></li>
+                                    <li><a href="{{ route('about.us') }}">about us</a></li>
+                                    <li><a href="{{ route('all.categoy') }}">Category</a></li>
+                                    <li><a href="{{ route('all.brand') }}">Brand</a></li>
+
                                 </ul>
                             </li>
                             <li>
@@ -648,7 +633,7 @@
                     <div class="footer_link">
                         <h3>Company</h3>
                         <ul>
-                            <li><a href="#about">About us</a></li>
+                            <li><a href="{{ route('about.us') }}">About us</a></li>
                             <li><a href="#">Contact Us</a></li>
                             <li><a href="#">Affiliate</a></li>
                             <li><a href="#">Career</a></li>
@@ -674,11 +659,11 @@
                     <div class="footer_link">
                         <h3>Quick Links</h3>
                         <ul>
-                            <li><a href="#">Privacy Ploicy</a></li>
-                            <li><a href="#">Terms and Condition</a></li>
-                            <li><a href="#">Return Policy</a></li>
-                            <li><a href="#">FAQ's</a></li>
-                            <li><a href="#">Become a Vendor</a></li>
+                            <li><a href="{{ route('provacy.policy') }}">Privacy Ploicy</a></li>
+                            <li><a href="{{ route('termsc.and.condition') }}">Terms and Condition</a></li>
+                            <li><a href="{{ route('return.policy') }}">Return Policy</a></li>
+                            <li><a href="{{ route('faq.frontend') }}">FAQ's</a></li>
+                            <li><a href="{{ route('become.vendor') }}">Become a Vendor</a></li>
                         </ul>
                     </div>
                 </div>

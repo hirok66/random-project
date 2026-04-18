@@ -39,7 +39,7 @@
         <div class="sidenav-menu">
 
             <!-- Brand Logo -->
-            @if (Auth::user()->role== 'admin')
+            @if (Auth::user()->role == 'admin')
                <a href="{{ route('admin.dashboard') }}" class="logo">
                 <span class="logo logo-light">
                     <span class="logo-lg"><img src="{{ asset('assets') }}/images/logo.png" alt="logo"></span>
@@ -51,7 +51,7 @@
                     <span class="logo-sm"><img src="{{ asset('assets') }}/images/logo-sm.png" alt="small logo"></span>
                 </span>
             </a>
-             @elseif (Auth::user()->role== 'moderator')
+             @elseif (Auth::user()->role == 'moderator')
                <a href="{{ route('moderator.dashboard') }}" class="logo">
                 <span class="logo logo-light">
                     <span class="logo-lg"><img src="{{ asset('assets') }}/images/logo.png" alt="logo"></span>
@@ -175,17 +175,112 @@
                             </ul>
                         </div>
                     </li>
-                    @if(Auth::user()->role== 'admin')
+                    @if(Auth::user()->role == 'admin')
                     <li class="side-nav-item">
                         <a href="{{ url('/admin/add-user') }}" target="_blank" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="users"></i></span>
-                            <span class="menu-text" data-lang="landing-page">Add User</span>
+                            <span class="menu-text" data-lang="landing-page">User Management</span>
                         </a>
                     </li>
                     @endif
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false" aria-controls="sidebarEcommerce" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="users"></i></span>
+                            <span class="menu-text" data-lang="ecommerce">About Usa</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarEcommerce">
+                            <ul class="sub-menu">
+
+
+                                 @if(Auth::user()->role == 'admin')
+                                                <li class="side-nav-item">
+                                                    <a href="{{ route('about.us.make')}}" target="_blank" class="side-nav-link">
+                                                        <span class="menu-icon"><i data-lucide="users"></i></span>
+                                                        <span class="menu-text" data-lang="landing-page">Add User</span>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                            @if(Auth::user()->role == 'admin')
+                                                <li class="side-nav-item">
+                                                    <a href="{{ route('about.us.index')}}" target="_blank" class="side-nav-link">
+                                                        <span class="menu-icon"><i data-lucide="users"></i></span>
+                                                        <span class="menu-text" data-lang="landing-page">About Us Support</span>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                            <li class="side-nav-item">
+                                                <a href="{{ route('about_us.video_index') }}" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="eco-pro-details">About us video</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="ecommerce-add-product.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="eco-pro-add">Add Product</span>
+                                                </a>
+                                            </li>
+                                {{-- {{-- <li class="side-nav-item"> --}}
+                                    <a href="{{ route('brand.index') }}" class="side-nav-link">
+                                        <span class="menu-text" data-lang="eco-categories">Top Brands</span>
+                                    </a>
+                                </li>
+
+                                <li class="side-nav-item">
+                                    <a href="ecommerce-customers.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="eco-customers">Customers</span>
+                                    </a>
+                                </li>
+
+                                <li class="side-nav-item">
+                                    <a data-bs-toggle="collapse" href="#sidebarSellers" aria-expanded="false" aria-controls="sidebarSellers" class="side-nav-link">
+                                        <span class="menu-text" data-lang="eco-sellers"> Sellers </span>
+                                        <span class="menu-arrow"></span>
+                                    </a>
+                                    <div class="collapse" id="sidebarSellers">
+                                        <ul class="sub-menu">
+                                            <li class="side-nav-item">
+                                                <a href="ecommerce-sellers.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="eco-sellers-list">Sellers</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="ecommerce-seller-details.html" class="side-nav-link">
+                                                    <span class="menu-text" data-lang="eco-sellers-details">Sellers Details</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li class="side-nav-item">
+                                    <a href="ecommerce-reviews.html" class="side-nav-link">
+                                        <span class="menu-text" data-lang="eco-reviews">Reviews</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+
+
+
+
                     <li class="side-nav-title" data-lang="apps-title">MODULE</li>
-                    @if(Auth::user()->role== 'admin')
+                    @if(Auth::user()->role == 'admin')
                     <li class="side-nav-item">
                         <a href="{{ route('admin.category.index') }}" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="chart-bar-stacked"></i> </span>
@@ -194,7 +289,7 @@
                     </li>
                       @endif
 
-                    @if(Auth::user()->role== 'admin')
+                    @if(Auth::user()->role == 'admin')
                     <li class="side-nav-item">
                         <a href="{{ route('admin.subcategory.index') }}" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="chart-bar-stacked"></i> </span>
@@ -203,7 +298,16 @@
                     </li>
                       @endif
 
-                     @if(Auth::user()->role== 'admin')
+                    @if(Auth::user()->role == 'admin')
+                    <li class="side-nav-item">
+                        <a href="{{ route('admin.subscribers.index') }}" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="chart-bar-stacked"></i> </span>
+                            <span class="menu-text" data-lang="chat">Subscribers </span>
+                        </a>
+                    </li>
+                      @endif
+
+                     @if(Auth::user()->role == 'admin')
                     <li class="side-nav-item">
                         <a href="{{ url('/admin/tages') }}" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="tags"></i> </span>
@@ -1463,12 +1567,12 @@
                         </div>
                     </li>
 
-                    <li class="side-nav-title mt-2" data-lang="items-title">Menu Items</li>
+                    <li class="side-nav-title mt-2" data-lang="items-title">Page</li>
 
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#sidebarMenuLevels" aria-expanded="false" aria-controls="sidebarMenuLevels" class="side-nav-link">
                             <span class="menu-icon"><i data-lucide="list-tree"></i></span>
-                            <span class="menu-text" data-lang="menu-levels"> Menu Levels </span>
+                            <span class="menu-text" data-lang="menu-levels"> Privacy Policy</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <div class="collapse" id="sidebarMenuLevels">
@@ -1481,13 +1585,29 @@
                                     <div class="collapse" id="sidebarSecondLevel">
                                         <ul class="sub-menu">
                                             <li class="side-nav-item">
-                                                <a href="javascript: void(0);" class="side-nav-link">
-                                                    <span class="menu-text">Item 2.1</span>
+                                                <a href="{{ route('policy.index') }}" class="side-nav-link">
+                                                    <span class="menu-text">Privacy Ploicy</span>
                                                 </a>
                                             </li>
                                             <li class="side-nav-item">
-                                                <a href="javascript: void(0);" class="side-nav-link">
-                                                    <span class="menu-text">Item 2.2</span>
+                                                <a href="{{ route('terms.index') }}" class="side-nav-link">
+                                                    <span class="menu-text">Terms and Condition</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="{{ route('return.index') }}" class="side-nav-link">
+                                                    <span class="menu-text">Return Policy</span>
+                                                </a>
+                                            </li>
+                                            <li class="side-nav-item">
+                                                <a href="{{ route('faq.index') }}" class="side-nav-link">
+                                                    <span class="menu-text">FAQ</span>
+                                                </a>
+                                            </li>
+
+                                            <li class="side-nav-item">
+                                                <a href="{{ route('become.index') }}" class="side-nav-link">
+                                                    <span class="menu-text">Become a Vendor</span>
                                                 </a>
                                             </li>
                                         </ul>

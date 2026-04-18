@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Policy;
+use App\Models\faq;
 use App\Models\Shop;
 use App\Models\SubCategory;
+use App\Models\returnPolicy;
+use App\Models\term;
+use App\Models\Vendor;
+use Illuminate\Http\Request;
 
 class FrontendLoginController extends Controller
 {
@@ -17,7 +23,8 @@ class FrontendLoginController extends Controller
 public function welcome()
 {
 
-
+ $faq = faq::where('status','active')->get();
+ $brands = Brand::where('status','active')->get();
 $categorys = Category::where('status', 'active')->latest()->paginate(10);
 $shops = Shop::where('status', 'active')->latest()->paginate(10);
 $subCategory = SubCategory::where('status', 'active')->latest()->paginate(10);
@@ -25,6 +32,8 @@ $subCategory = SubCategory::where('status', 'active')->latest()->paginate(10);
         'categorys'=>$categorys,
         'shops'=>$shops,
         'subCategories'=>$subCategory,
+        'brands'=>$brands,
+        'faq'=>$faq,
     ]);
 }
 
@@ -88,4 +97,32 @@ public function showLoginForm()
         $request->session()->regenerateToken();
         return redirect('/')->with('success', 'Logged out successfully!');
 }
+
+
+
+
+
+
+// policy
+public function policy(){
+    $policys=  Policy::where('status', 'active')->get();
+    return view('frontend.policy.index',compact('policys'));
+}
+public function trmesc(){
+    $policys=  term::where('status', 'active')->get();
+    return view('frontend.term.index',compact('policys'));
+}
+public function return(){
+    $policys=  returnPolicy::where('status', 'active')->get();
+    return view('frontend.term.index',compact('policys'));
+}
+public function faq(){
+    $faq=  faq::where('status', 'active')->get();
+    return view('frontend.faq.index',compact('faq'));
+}
+public function become(){
+    $become=  Vendor::where('status', 'active')->get();
+    return view('frontend.become.index',compact('become'));
+}
+
 }
